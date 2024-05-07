@@ -26,21 +26,23 @@ public class Point {
         return xyz.toString();
     }
 
-    /** add  */
+    /** adds a vector to the point  */
     public Point add(Vector v) {
         return new Point( v.xyz.add(this.xyz));
     }
 
+    /**  subtraction of a point from our point and return a vector */
     public Vector subtract(Point p) {
         return new Vector( p.xyz.subtract(this.xyz));
     }
 
+    /** Calculate the squared distance between two points */
     public double distanceSquared(Point p) {
         Double3 temp = (p.xyz.subtract(this.xyz)).product(p.xyz.subtract(this.xyz));
         return temp.d1 + temp.d2 + temp.d3;
     }
 
-
+    /** Calculate the distance between two points */
     public double distance(Point p) {
         return Math.sqrt(this.distanceSquared(p));
     }
