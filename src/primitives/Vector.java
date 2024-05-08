@@ -8,7 +8,7 @@ package primitives;
 public class Vector extends Point {
 
     /** Constructor based on three double values */
-    public Vector(Double d1, Double d2, Double d3) {
+    public Vector(double d1, double d2, double d3) {
         super(d1, d2, d3);
         if (d1 == 0 && d2 == 0 && d3 == 0)
             throw new IllegalArgumentException("Vector head cannot be Point(0,0,0)");

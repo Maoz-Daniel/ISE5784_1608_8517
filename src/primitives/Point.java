@@ -33,7 +33,7 @@ public class Point {
 
     /**  subtraction of a point from our point and return a vector */
     public Vector subtract(Point p) {
-        return new Vector( p.xyz.subtract(this.xyz));
+        return new Vector( xyz.subtract(p.xyz));
     }
 
     /** Calculate the squared distance between two points */

@@ -3,8 +3,8 @@ import primitives.Point;
 import primitives.Vector;
 
 public class Plane {
-    private Point q;
-    private Vector normal;
+   final private Point q;
+   final private Vector normal;
 
     public Plane(Point p1, Point p2, Point p3) {
          normal = (p2.subtract(p1)).crossProduct(p3.subtract(p1)).normalize();
