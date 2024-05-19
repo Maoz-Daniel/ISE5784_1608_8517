@@ -21,6 +21,7 @@ public class Point {
         xyz = other;
     }
 
+
    @Override
     public String toString() {
         return xyz.toString();
