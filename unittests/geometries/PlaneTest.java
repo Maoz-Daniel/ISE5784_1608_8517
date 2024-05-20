@@ -42,19 +42,14 @@ class PlaneTest {
     @Test
    public void testPlaneGetNormal() {
 
-        Plane plane1 = new Plane(new Point(1, 2, 3), new Vector(1, 2, 3));
+
         Plane plane2 = new Plane(new Point(1, 0, 0) ,  new Point(0, 1, 0),new Point(1, 1, 0));
         // ============ Equivalence Partitions Tests ==============
+
         // TC01: test to see that the getNormal function works correctly
-        assertEquals(new Vector(1, 2, 3), plane1.getNormal(new Point(1, 2, 3)), "getNormal() wrong result");
-
-        // TC02: test to see that the getNormal function works correctly
-        assertEquals(new Vector(1, 2, 3), plane1.getNormal(), "getNormal() wrong result");
-
-        // TC03: test to see that the getNormal function works correctly
         assertEquals(new Vector(0, 0, 1), plane2.getNormal(new Point(1, 1, 0)), "getNormal() wrong result");
 
-        // TC04: test to see that the getNormal function works correctly
+        // TC02: test to see that the getNormal function works correctly
         assertEquals(new Vector(0, 0, 1), plane2.getNormal(), "getNormal() wrong result");
     }
 

@@ -18,7 +18,16 @@ public class Ray {
         head = p;
         direction = v.normalize();
     }
-@Override
+
+    public Point getHead() {
+        return head;
+    }
+
+    public Vector getDirection() {
+        return direction;
+    }
+
+    @Override
    public boolean equals(Object obj) {
         if (this == obj) return true;
         return ((obj instanceof Ray other) &&
