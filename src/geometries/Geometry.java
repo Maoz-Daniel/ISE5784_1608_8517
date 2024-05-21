@@ -7,6 +7,10 @@ import primitives.Vector;
  */
 
 public interface Geometry {
+    /**
+     * @param point
+     * @return the normal to the geometry at the point
+     */
     public Vector getNormal(Point point);
 
 }

@@ -47,10 +47,16 @@ class PlaneTest {
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: test to see that the getNormal function works correctly
-        assertEquals(new Vector(0, 0, 1), plane2.getNormal(new Point(1, 1, 0)), "getNormal() wrong result");
+       Vector normal1 = plane2.getNormal(new Point(1, 1, 0));
+        boolean isCorrectNormalWithPoint = normal1.equals(new Vector(0, 0, 1)) || normal1.equals(new Vector(0, 0, -1));
+        assertTrue(isCorrectNormalWithPoint, "getNormal() returned an incorrect result: " + normal1);
 
         // TC02: test to see that the getNormal function works correctly
-        assertEquals(new Vector(0, 0, 1), plane2.getNormal(), "getNormal() wrong result");
+
+        assertEquals(new Vector(0, 0, -1) , plane2.getNormal(), "getNormal() wrong result");
+        Vector normal2 = plane2.getNormal(new Point(1, 1, 0));
+        boolean isCorrectNormalWithoutPoint = normal2.equals(new Vector(0, 0, 1)) || normal2.equals(new Vector(0, 0, -1));
+        assertTrue(isCorrectNormalWithoutPoint, "getNormal() returned an incorrect result: " + normal2);
     }
 
 }

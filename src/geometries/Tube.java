@@ -22,11 +22,11 @@ public class Tube extends RadialGeometry {
     @Override
     public Vector getNormal(Point point) {
         double t = 0;
-        try {
-            t = axis.getDirection().dotProduct(point.subtract(axis.getHead())); // t = V * (P - P0)
-        } catch (IllegalArgumentException e) {
-            return point.subtract(axis.getHead()).normalize();// P is on the head of the ray
-        }
+
+        t = axis.getDirection().dotProduct(point.subtract(axis.getHead())); // t = V * (P - P0)
+
+        if (t == 0)// P is on the head of the ray
+            return point.subtract(axis.getHead()).normalize();
         Point o = axis.getHead().add(axis.getDirection().scale(t));// O = P0 + tV
         return point.subtract(o).normalize();// N = P - O
     }

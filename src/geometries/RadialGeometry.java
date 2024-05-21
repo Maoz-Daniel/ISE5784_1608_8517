@@ -10,6 +10,8 @@ public abstract class RadialGeometry implements Geometry {
 
    /** returns the radius of the radial geometry*/
     public RadialGeometry(double _radius) {
+        if(_radius <= 0)
+            throw new IllegalArgumentException("radius must be positive");
         radius = _radius;
     }
 
