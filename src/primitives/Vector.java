@@ -1,7 +1,5 @@
 package primitives;
 
-import static primitives.Util.isZero;
-
 /**
  * Class Vector is the basic class representing a vector in a 3D system.
  * The class is based on class Point, which is a basic class representing a point in a 3D system.
@@ -12,7 +10,7 @@ public class Vector extends Point {
     /** Constructor based on three double values */
     public Vector(double d1, double d2, double d3) {
         super(d1, d2, d3);
-        if (isZero(d1)  && isZero(d2) && isZero(d3))
+        if (d1 == 0 && d2 == 0 && d3 == 0)
             throw new IllegalArgumentException("Vector head cannot be Point(0,0,0)");
         ;
     }

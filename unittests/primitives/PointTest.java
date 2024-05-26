@@ -13,6 +13,7 @@ class PointTest {
     @Test
    public void add() {
         Point p1 = new Point(1, 2, 3);
+
         // ============ Equivalence Partitions Tests ==============
 
         Vector v = new Vector(1, 1, 1);
@@ -37,7 +38,8 @@ class PointTest {
         assertEquals(new Vector(0, 1, 2), v, "subtract() wrong result");
 
         // =============== Boundary Values Tests ==================
-        // TC02: test subtracting the same point
+
+        // TC10: test subtracting the same point
         assertThrows(IllegalArgumentException.class, () -> p1.subtract(p1),
                 "subtract() for itself should throw an exception");
     }

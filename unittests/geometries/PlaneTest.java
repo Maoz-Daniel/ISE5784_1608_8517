@@ -14,7 +14,9 @@ class PlaneTest {
      */
     @Test
     public void testPlaneConstructor() {
+
         // ============ Equivalence Partitions Tests ==============
+
         // TC01: test to see that the constructor works correctly
         assertDoesNotThrow(() -> new Plane(new Point(1, 2, 3), new Point(2, 4, 6), new Point(2, 4, 5)), "ERROR: failed to create a plane");
 
@@ -23,14 +25,14 @@ class PlaneTest {
 
         // =============== Boundary Values Tests ==================
 
-        // TC03: test to see that plane cannot be created with 3 identical points
+        // TC10: test to see that plane cannot be created with 3 identical points
         assertThrows(IllegalArgumentException.class, () -> new Plane(new Point(1, 2, 3), new Point(1, 2, 3), new Point(1, 2, 3)), "ERROR: plane cannot be created with 3 identical points");
 
-        // TC04: test to see that all three points must be different
+        // TC11: test to see that all three points must be different
         assertThrows(IllegalArgumentException.class, () -> new Plane(new Point(1, 2, 3), new Point(1, 2, 3), new Point(2, 4, 6)),
                 "ERROR: all three points must be different");
 
-        // TC05: test to see that all three points cannot be on the same line
+        // TC12: test to see that all three points cannot be on the same line
         assertThrows(IllegalArgumentException.class, () -> new Plane(new Point(1, 2, 3), new Point(2, 4, 6), new Point(3, 6, 9)),
                 "ERROR: all three points cannot be on the same line");
 
@@ -42,9 +44,9 @@ class PlaneTest {
     @Test
    public void testPlaneGetNormal() {
 
+        // ============ Equivalence Partitions Tests ==============
 
         Plane plane2 = new Plane(new Point(1, 0, 0) ,  new Point(0, 1, 0),new Point(1, 1, 0));
-        // ============ Equivalence Partitions Tests ==============
 
         // TC01: test to see that the getNormal function works correctly
        Vector normal1 = plane2.getNormal(new Point(1, 1, 0));

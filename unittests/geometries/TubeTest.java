@@ -37,16 +37,12 @@ class TubeTest {
     @Test
     void testTubeGetNormal() {
 Tube tube = new Tube(new Ray(new Point(1, 0, 0), new Vector(1, 0, 0)), 1);
-
         // ============ Equivalence Partitions Tests ==============
+
         // TC01: test to see that the getNormal function works correctly
-        Vector normal1 = tube.getNormal(new Point(2, 1, 0));
-        boolean isCorrectNormal1 = normal1.equals(new Vector(0, 1, 0)) || normal1.equals(new Vector(0, -1, 0));
-        assertTrue(isCorrectNormal1, "getNormal() wrong result: " + normal1);
+        assertEquals(new Vector(0, 0, 1), tube.getNormal(new Point(1, 1, 0)), "getNormal() wrong result");
 
         // TC02: test to see that the getNormal function works with a point on the head of the ray
-        Vector normal2 = tube.getNormal(new Point(1, 1, 0));
-        boolean isCorrectNormal2 = normal2.equals(new Vector(0, 1, 0)) || normal2.equals(new Vector(0, -1, 0));
-        assertTrue(isCorrectNormal2, "getNormal() wrong result: " + normal2);
+        assertEquals(new Vector(0, 1, 0), tube.getNormal(new Point(1, 1, 0)), "getNormal() wrong result");
     }
 }
