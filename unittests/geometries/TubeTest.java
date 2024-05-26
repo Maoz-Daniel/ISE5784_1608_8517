@@ -20,11 +20,12 @@ class TubeTest {
                 new Vector( new Double3(2,2,2))), 1), "ERROR: failed to create a tube");
 
         // =============== Boundary Values Tests ==================
-        // TC02: test to see that the constructor does not work with a negative radius
+
+        // TC10: test to see that the constructor does not work with a negative radius
         assertThrows(IllegalArgumentException.class, () -> new Tube( new Ray(new Point(1,1,1),
                 new Vector( new Double3(2,2,2))), -1), "ERROR: tube cannot be created with a negative radius");
 
-        // TC03: test to see that the constructor does not work with a radius of 0
+        // TC11: test to see that the constructor does not work with a radius of 0
         assertThrows(IllegalArgumentException.class, () -> new Tube( new Ray(new Point(1,1,1),
                 new Vector( new Double3(2,2,2))), 0), "ERROR: tube cannot be created with a radius of 0");
 
@@ -37,6 +38,7 @@ class TubeTest {
     @Test
     void testTubeGetNormal() {
 Tube tube = new Tube(new Ray(new Point(1, 0, 0), new Vector(1, 0, 0)), 1);
+
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: test to see that the getNormal function works correctly

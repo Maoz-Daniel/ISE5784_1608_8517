@@ -26,10 +26,10 @@ class VectorTest {
 
         // =============== Boundary Values Tests ==================
 
-      // TC03: test to see that the first constructor don't create a zero vector
+      // TC10: test to see that the first constructor don't create a zero vector
       assertThrows(IllegalArgumentException.class,()->new Vector(0,0,0),"ERROR: zero vector cant be created");
 
-      // TC04: test to see that the second constructor don't create a zero vector
+      // TC12: test to see that the second constructor don't create a zero vector
       Double3 d0=new Double3(0,0,0);
         assertThrows(IllegalArgumentException.class,()->new Vector(d0),"ERROR: zero vector cant be created");
 
@@ -49,7 +49,7 @@ class VectorTest {
 
         // =============== Boundary Values Tests ==================
         Vector v3 = new Vector(-1, -2, -3);
-        // TC02: test to see that the add function works correctly
+        // TC10: test to see that the add function works correctly
         assertThrows(IllegalArgumentException.class, () -> v1.add(v3),
                 "add() cannot add with opposite vector");
 
@@ -70,7 +70,7 @@ class VectorTest {
 
         // =============== Boundary Values Tests ==================
 
-        // TC02: test to see that the subtract vector from itself is zero vector
+        // TC10: test to see that the subtract vector from itself is zero vector
         assertThrows(IllegalArgumentException.class, ()-> v1.subtract(v1), " cannot subtract() vector by itself ");
     }
 
@@ -86,7 +86,7 @@ class VectorTest {
 
         // =============== Boundary Values Tests ==================
 
-        // TC02: test to see that the scale by zero should throw an exception
+        // TC10: test to see that the scale by zero should throw an exception
         assertThrows(IllegalArgumentException.class,() -> v1.scale(0), "scale() by 0 should throw an exception");
     }
 
@@ -109,11 +109,11 @@ class VectorTest {
 
         // =============== Boundary Values Tests ==================
 
-        // TC03: test to see that  vector product with the unit vector work correctly
+        // TC10: test to see that  vector product with the unit vector work correctly
         Vector v4 = new Vector(1, 0, 0);
         assertEquals(1, v1.dotProduct(v4), DELTA, "dotProduct() wrong result");
 
-        // TC04: test to see that  vector product with 90 degrees vector work correctly
+        // TC11: test to see that  vector product with 90 degrees vector work correctly
         Vector v5 = new Vector(2, -3, 0);
         assertEquals(-4, v1.dotProduct(v5), DELTA, "dotProduct() wrong result");
 
@@ -153,7 +153,9 @@ class VectorTest {
     @Test
    public void testVectorLengthSquared() {
         Vector v1 = new Vector(1, 2, 3);
+
         // ============ Equivalence Partitions Tests ==============
+
         // TC01: test to see that the lengthSquared function works correctly
         assertEquals(14, v1.lengthSquared(), DELTA, "lengthSquared() wrong result");
     }
@@ -165,6 +167,7 @@ class VectorTest {
    public void testVectorLength() {
         Vector v1 = new Vector(1, 2, 3);
         // ============ Equivalence Partitions Tests ==============
+
         // TC01: test to see that the length function works correctly
         assertEquals(Math.sqrt(14), v1.length(), DELTA, "length() wrong result");
     }
