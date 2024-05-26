@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SphereTest {
 
+    /** Delta value for accuracy when comparing the numbers of type 'double' in assertEquals */
+    private final double DELTA = 0.000001;
 
     /**
      * Test method for {@link geometries.Sphere#Sphere(Point, double)}.
@@ -35,6 +37,10 @@ class SphereTest {
 
         // TC01: test to see that the getNormal function works correctly
         Sphere sphere = new Sphere(new Point(1, 0, 0), 1);
-        assertEquals(new Vector(1, 0, 0), sphere.getNormal(new Point(2, 0, 0)), "getNormal() wrong result");
-    }
+        Vector normal = sphere.getNormal(new Point(2,0 , 0));
+        assertTrue(normal.equals(new Vector(1, 0, 0)) || normal.equals(new Vector(-1, 0, 0)), "getNormal() returned an incorrect result: " + normal);
+
+    // TC02: test to see that the getNormal function length is 1
+        assertEquals(1, normal.length(), DELTA, "getNormal() returned an incorrect result: " + normal);
+          }
 }

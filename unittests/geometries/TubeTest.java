@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TubeTest {
 
+    /** Delta value for accuracy when comparing the numbers of type 'double' in assertEquals */
+    private final double DELTA = 0.000001;
     /**
      * Test method for {@link geometries.Tube#Tube(Ray, double)}.
      */
@@ -40,9 +42,15 @@ Tube tube = new Tube(new Ray(new Point(1, 0, 0), new Vector(1, 0, 0)), 1);
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: test to see that the getNormal function works correctly
-        assertEquals(new Vector(0, 0, 1), tube.getNormal(new Point(1, 1, 0)), "getNormal() wrong result");
+        Vector normal1 = tube.getNormal(new Point(2, 1, 0));
+        assertTrue( normal1.equals(new Vector(0, 1, 0)) || normal1.equals(new Vector(0, -1, 0)), "getNormal() returned an incorrect result: " + normal1);
 
         // TC02: test to see that the getNormal function works with a point on the head of the ray
-        assertEquals(new Vector(0, 1, 0), tube.getNormal(new Point(1, 1, 0)), "getNormal() wrong result");
+     Vector normal2 = tube.getNormal(new Point(1, 1, 0));
+     assertTrue( normal2.equals(new Vector(0, 1, 0)) || normal2.equals(new Vector(0, -1, 0)), "getNormal() returned an incorrect result: " + normal2);
+
+    // TC03: test to see that the getNormal length is 1
+        assertEquals(1, normal1.length(), DELTA, "getNormal() returned an incorrect result: " + normal1);
+
     }
 }

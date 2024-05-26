@@ -2,6 +2,7 @@ package geometries;
 
 import primitives.Point;
 import primitives.Ray;
+import primitives.Util;
 import primitives.Vector;
 
 /**
@@ -25,7 +26,7 @@ public class Tube extends RadialGeometry {
 
         t = axis.getDirection().dotProduct(point.subtract(axis.getHead())); // t = V * (P - P0)
 
-        if (t == 0)// P is on the head of the ray
+        if (Util.isZero(t))// P is on the head of the ray
             return point.subtract(axis.getHead()).normalize();
         Point o = axis.getHead().add(axis.getDirection().scale(t));// O = P0 + tV
         return point.subtract(o).normalize();// N = P - O
