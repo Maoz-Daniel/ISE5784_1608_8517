@@ -42,9 +42,9 @@ class PlaneTest {
     @Test
    public void testPlaneGetNormal() {
 
-
-        Plane plane2 = new Plane(new Point(1, 0, 0) ,  new Point(0, 1, 0),new Point(1, 1, 0));
         // ============ Equivalence Partitions Tests ==============
+        Plane plane2 = new Plane(new Point(1, 0, 0) ,  new Point(0, 1, 0),new Point(1, 1, 0));
+
 
         // TC01: test to see that the getNormal function works correctly
         assertEquals(new Vector(0, 0, 1), plane2.getNormal(new Point(1, 1, 0)), "getNormal() wrong result");

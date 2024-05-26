@@ -7,10 +7,11 @@ package primitives;
  */
 public class Vector extends Point {
 
+
     /** Constructor based on three double values */
     public Vector(double d1, double d2, double d3) {
         super(d1, d2, d3);
-        if (d1 == 0 && d2 == 0 && d3 == 0)
+        if (Util.isZero(d1) && Util.isZero(d2) && Util.isZero(d3))
             throw new IllegalArgumentException("Vector head cannot be Point(0,0,0)");
         ;
     }
@@ -32,7 +33,7 @@ public class Vector extends Point {
         return new Vector(this.xyz.scale(scalar));
     }
 
-    /** scalar multipication of two vectors */
+    /** scalar multiplication of two vectors */
     public double dotProduct(Vector v){
        Double3 temp = this.xyz.product(v.xyz);
        return temp.d1 + temp.d2 + temp.d3;
