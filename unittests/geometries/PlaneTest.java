@@ -3,6 +3,8 @@ package geometries;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Vector;
+import primitives.Ray;
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlaneTest {
@@ -62,6 +64,67 @@ class PlaneTest {
 
         // TC03: test to see that the getNormal function length is 1
         assertEquals(normal1.length() , 1, DELTA , "getNormal() returned a vector with a length different than 1");
+    }
+
+    /**
+     * Test method for {@link geometries.Plane#findIntersections(primitives.Ray)}.
+     */
+    @Test
+    public void testFindIntersections() {
+        Plane plane = new Plane(new Point(1, 1, 1), new Vector(0, 0, 1));
+        Point p001 = new Point(0, 0, 1);
+
+        Vector v0m11 = new Vector(0, -1, 1);
+        Vector v001 = new Vector(0, 0, 1);
+        // ============ Equivalence Partitions Tests ==============
+
+        // Ray's line starts outside the plane and isn't parallel to the plane and isn't orthogonal
+        // to the plane and intersects the plane (1 point)
+        var result = plane.findIntersections(new Ray(new Point(0, 1, 0), v0m11));
+        assertEquals(1, result.size(), "Ray's line intersects the plane");
+        assertEquals(List.of(p001), result, "Ray's line intersects the plane");
+
+        // Ray's line starts outside the plane and isn't parallel to the plane and isn't orthogonal
+        // to the plane and doesn't intersects the plane (0 point)
+        result = plane.findIntersections(new Ray(new Point(0, 1, 2), v0m11));
+        assertNull(result, "Ray's line out of plane");
+
+        // ============ Boundary Values Tests ==============
+
+        // **** Group: Ray's line is parallel to the plane
+        // Ray's line starts on the plane and is parallel to the plane and intersects the plane (0 point)
+        result = plane.findIntersections(new Ray(p001, new Vector(0, 1, 0)));
+        assertNull(result, "Ray's line out of plane");
+
+        // Ray's line starts outside the plane and is parallel to the plane and doesn't intersects the plane (0 point)
+        result = plane.findIntersections(new Ray(new Point(0, 0, 2), new Vector(0, 1, 0)));
+        assertNull(result, "Ray's line out of plane");
+
+
+        // **** Group: Ray's line is orthogonal to the plane
+
+        // Ray's line starts before the plane and is orthogonal to the plane and intersects the plane (1 point)
+        result = plane.findIntersections(new Ray(new Point(0, 0, 0), v001));
+        assertEquals(1, result.size(), "Ray's line intersects the plane");
+        assertEquals(List.of(p001), result, "Ray's line intersects the plane");
+
+        // Ray's line starts on the plane and is orthogonal to the plane  (0 point)
+        result = plane.findIntersections(new Ray(p001,v001));
+        assertNull(result, "Ray's line out of plane");
+
+        // Ray's line starts after the plane and is orthogonal to the plane  (0 point)
+        result = plane.findIntersections(new Ray(new Point(0, 0, 2), v001));
+        assertNull(result, "Ray's line out of plane");
+
+        // **** Group: Ray's line isn't parallel to the plane and isn't orthogonal to the plane
+
+        // Ray's line starts on the point of the plane
+        result = plane.findIntersections(new Ray(new Point(1,1,1), v0m11));
+        assertNull(result, "Ray's line out of plane");
+
+        // Ray's line starts on the plane and intersects the plane (0 point)
+        result = plane.findIntersections(new Ray(p001, v0m11));
+        assertNull(result, "Ray's line out of plane");
     }
 
 }
