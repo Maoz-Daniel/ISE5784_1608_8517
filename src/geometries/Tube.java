@@ -5,6 +5,8 @@ import primitives.Ray;
 import primitives.Util;
 import primitives.Vector;
 
+import java.util.List;
+
 /**
  * Tube class represents a tube in 3D Cartesian coordinate
  * system
@@ -12,9 +14,9 @@ import primitives.Vector;
 public class Tube extends RadialGeometry {
 
     /** The axis of the tube*/
-   final protected Ray axis;
+    final protected Ray axis;
 
-   /** constructor receiving an axis and a radius*/
+    /** constructor receiving an axis and a radius*/
     public Tube(Ray _axis, double _radius) {
         super(_radius);
         axis = _axis;
@@ -30,5 +32,11 @@ public class Tube extends RadialGeometry {
             return point.subtract(axis.getHead()).normalize();
         Point o = axis.getHead().add(axis.getDirection().scale(t));// O = P0 + tV
         return point.subtract(o).normalize();// N = P - O
+    }
+
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        return null;
+
     }
 }

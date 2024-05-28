@@ -15,7 +15,7 @@ public class Cylinder extends Tube{
     /**
      * Cylinder height
      */
-   final private double height;
+    final private double height;
 
     /**
      * Cylinder constructor receiving a radius and height
@@ -36,17 +36,12 @@ public class Cylinder extends Tube{
             return axis.getDirection().normalize();
         else if (point.equals(axis.getHead().add(axis.getDirection().scale(height)))) // if the point is in the center of the other base
             return axis.getDirection().normalize();
-          if(Util.isZero(point.subtract(axis.getHead()).dotProduct(axis.getDirection()))) // if the point is on the base
+        if(Util.isZero(point.subtract(axis.getHead()).dotProduct(axis.getDirection()))) // if the point is on the base
             return axis.getDirection().normalize();
-          else if (Util.isZero((point.subtract(axis.getHead().add(axis.getDirection().scale(height)))).dotProduct(axis.getDirection()))) // if the point is on the other base
+        else if (Util.isZero((point.subtract(axis.getHead().add(axis.getDirection().scale(height)))).dotProduct(axis.getDirection()))) // if the point is on the other base
             return axis.getDirection().normalize();
 
-          else // if the point is on the side
-          {
-              double t = axis.getDirection().dotProduct(point.subtract(axis.getHead())); // t = V * (P - P0)
-              Point o = axis.getHead().add(axis.getDirection().scale(t));// O = P0 + tV
-              return point.subtract(o).normalize();// N = P - O
-
-          }
+        else // if the point is on the side
+            return super.getNormal(point);
     }
 }

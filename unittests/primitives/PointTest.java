@@ -11,7 +11,7 @@ class PointTest {
      * Test method for {@link primitives.Point#add(primitives.Vector)}.
      */
     @Test
-   public void add() {
+    public void add() {
         Point p1 = new Point(1, 2, 3);
 
         // ============ Equivalence Partitions Tests ==============
@@ -27,7 +27,7 @@ class PointTest {
      * Test method for {@link primitives.Point#subtract(primitives.Point)}.
      */
     @Test
-   public void subtract() {
+    public void subtract() {
         Point p1 = new Point(1, 2, 3);
         // ============ Equivalence Partitions Tests ==============
 

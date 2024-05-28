@@ -51,16 +51,16 @@ class CylinderTest {
 
         // TC02: test to see that the getNormal function works correctly on base
         Vector normalBase1 = cylinder.getNormal(new Point(0, 0.5, 0));
-      assertTrue(normalBase1.equals(new Vector(1, 0, 0)) || normalBase1.equals(new Vector(-1, 0, 0)), "getNormal() returned an incorrect result");
+        assertTrue(normalBase1.equals(new Vector(1, 0, 0)) || normalBase1.equals(new Vector(-1, 0, 0)), "getNormal() returned an incorrect result");
 
-      // TC03: test to see that the getNormal function works correctly on other base
+        // TC03: test to see that the getNormal function works correctly on other base
         Vector normalBase2 = cylinder.getNormal(new Point(2, 0.5, 0));
         assertTrue(normalBase2.equals(new Vector(1, 0, 0)) || normalBase2.equals(new Vector(-1, 0, 0)), "getNormal() returned an incorrect result");
 
         // TC04: test to see that the getNormal function length is 1
         assertEquals(normalBase1.length() , 1, DELTA , "getNormal() returned a vector with a length different than 1");
 
-     // =============== Boundary Values Tests ==================
+        // =============== Boundary Values Tests ==================
 
         // TC10: test to see that the getNormal function works correctly on head
         Vector normalHead = cylinder.getNormal(new Point(0, 0, 0));
@@ -78,4 +78,5 @@ class CylinderTest {
         Vector normalAxis2 = cylinder.getNormal(new Point(2, 2, 0));
         assertTrue(normalAxis2.equals(new Vector(1, 0, 0)) || normalAxis2.equals(new Vector(-1, 0, 0)), "getNormal() returned an incorrect result");
     }
+
 }

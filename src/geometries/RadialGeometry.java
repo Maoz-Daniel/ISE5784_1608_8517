@@ -6,9 +6,9 @@ package geometries;
  */
 public abstract class RadialGeometry implements Geometry {
     /** The radius of the radial geometry*/
-   final protected double radius;
+    final protected double radius;
 
-   /** returns the radius of the radial geometry*/
+    /** returns the radius of the radial geometry*/
     public RadialGeometry(double _radius) {
         if(_radius <= 0)
             throw new IllegalArgumentException("radius must be positive");

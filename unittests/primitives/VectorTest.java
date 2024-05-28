@@ -13,27 +13,27 @@ class VectorTest {
      * Test method for {@link primitives.Vector#Vector(double, double, double)}.
      */
     @Test
-  public void testVectorConstructor(){
+    public void testVectorConstructor(){
 
-             // ============ Equivalence Partitions Tests ==============
+        // ============ Equivalence Partitions Tests ==============
 
         // TC01: test to see that the constructor works correctly
-      assertDoesNotThrow(()->new Vector(1,2,3),"ERROR: failed to create a vector");
+        assertDoesNotThrow(()->new Vector(1,2,3),"ERROR: failed to create a vector");
 
         // TC02: test to see that the second constructor works correctly
-      Double3 d3=new Double3(1,2,3);
+        Double3 d3=new Double3(1,2,3);
         assertDoesNotThrow(()->new Vector(d3),"ERROR: failed to create a vector");
 
         // =============== Boundary Values Tests ==================
 
-      // TC10: test to see that the first constructor don't create a zero vector
-      assertThrows(IllegalArgumentException.class,()->new Vector(0,0,0),"ERROR: zero vector cant be created");
+        // TC10: test to see that the first constructor don't create a zero vector
+        assertThrows(IllegalArgumentException.class,()->new Vector(0,0,0),"ERROR: zero vector cant be created");
 
-      // TC12: test to see that the second constructor don't create a zero vector
-      Double3 d0=new Double3(0,0,0);
+        // TC12: test to see that the second constructor don't create a zero vector
+        Double3 d0=new Double3(0,0,0);
         assertThrows(IllegalArgumentException.class,()->new Vector(d0),"ERROR: zero vector cant be created");
 
-  }
+    }
 
     /**
      * Test method for {@link primitives.Vector#add(primitives.Vector)}.
@@ -78,7 +78,7 @@ class VectorTest {
      * Test method for {@link primitives.Vector#scale(double)} (primitives.Vector)}.
      */
     @Test
-   public void testVectorScale() {
+    public void testVectorScale() {
         Vector v1 = new Vector(1, 2, 3);
         // ============ Equivalence Partitions Tests ==============
         // TC01: test to see that the scale function works correctly
@@ -94,7 +94,7 @@ class VectorTest {
      * Test method for {@link primitives.Vector#dotProduct(Vector)} (primitives.Vector)}.
      */
     @Test
-   public void testVectorDotProduct() {
+    public void testVectorDotProduct() {
 
         Vector v1 = new Vector(1, 2, 3);
         // ============ Equivalence Partitions Tests ==============
@@ -123,8 +123,8 @@ class VectorTest {
      * Test method for {@link primitives.Vector#crossProduct(Vector)} (primitives.Vector)}.
      */
     @Test
-   public void testVectorCrossProduct() {
-    Vector v1 = new Vector(1, 2, 3);
+    public void testVectorCrossProduct() {
+        Vector v1 = new Vector(1, 2, 3);
         // ============ Equivalence Partitions Tests ==============
         Vector v2 = new Vector(1, 1, 1);
         // TC01: test to see that the crossProduct function works correctly
@@ -151,7 +151,7 @@ class VectorTest {
      * Test method for {@link primitives.Vector#lengthSquared()}.
      */
     @Test
-   public void testVectorLengthSquared() {
+    public void testVectorLengthSquared() {
         Vector v1 = new Vector(1, 2, 3);
 
         // ============ Equivalence Partitions Tests ==============
@@ -164,7 +164,7 @@ class VectorTest {
      * Test method for {@link primitives.Vector#length()}.
      */
     @Test
-   public void testVectorLength() {
+    public void testVectorLength() {
         Vector v1 = new Vector(1, 2, 3);
         // ============ Equivalence Partitions Tests ==============
 
@@ -176,10 +176,14 @@ class VectorTest {
      * Test method for {@link primitives.Vector#normalize()}.
      */
     @Test
-   public void testVectorNormalize() {
+    public void testVectorNormalize() {
         Vector v1 = new Vector(1, 2, 3);
         // ============ Equivalence Partitions Tests ==============
         // TC01: test to see that the normalize function works correctly
         assertEquals(new Vector(1 / Math.sqrt(14), 2 / Math.sqrt(14), 3 / Math.sqrt(14)), v1.normalize(), "normalize() wrong result");
+
+        // =============== Boundary Values Tests ==================
+        // TC10: test to see that the normalize function works correctly on a unit vector
+        assertEquals(1, v1.normalize().length(), DELTA, "normalize() wrong result");
     }
 }

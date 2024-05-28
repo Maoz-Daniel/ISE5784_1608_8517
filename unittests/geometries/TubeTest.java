@@ -15,7 +15,7 @@ class TubeTest {
      * Test method for {@link geometries.Tube#Tube(Ray, double)}.
      */
     @Test
-   public void testTubeConstructor() {
+    public void testTubeConstructor() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: test to see that the constructor works correctly
         assertDoesNotThrow(() -> new Tube( new Ray(new Point(1,1,1),
@@ -38,7 +38,7 @@ class TubeTest {
      */
     @Test
     void testTubeGetNormal() {
-Tube tube = new Tube(new Ray(new Point(1, 0, 0), new Vector(1, 0, 0)), 1);
+        Tube tube = new Tube(new Ray(new Point(1, 0, 0), new Vector(1, 0, 0)), 1);
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: test to see that the getNormal function works correctly
@@ -46,10 +46,10 @@ Tube tube = new Tube(new Ray(new Point(1, 0, 0), new Vector(1, 0, 0)), 1);
         assertTrue( normal1.equals(new Vector(0, 1, 0)) || normal1.equals(new Vector(0, -1, 0)), "getNormal() returned an incorrect result: " + normal1);
 
         // TC02: test to see that the getNormal function works with a point on the head of the ray
-     Vector normal2 = tube.getNormal(new Point(1, 1, 0));
-     assertTrue( normal2.equals(new Vector(0, 1, 0)) || normal2.equals(new Vector(0, -1, 0)), "getNormal() returned an incorrect result: " + normal2);
+        Vector normal2 = tube.getNormal(new Point(1, 1, 0));
+        assertTrue( normal2.equals(new Vector(0, 1, 0)) || normal2.equals(new Vector(0, -1, 0)), "getNormal() returned an incorrect result: " + normal2);
 
-    // TC03: test to see that the getNormal length is 1
+        // TC03: test to see that the getNormal length is 1
         assertEquals(1, normal1.length(), DELTA, "getNormal() returned an incorrect result: " + normal1);
 
     }

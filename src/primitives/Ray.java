@@ -19,16 +19,17 @@ public class Ray {
         direction = v.normalize();
     }
 
+    /** Getter for the head */
     public Point getHead() {
         return head;
     }
-
+    /** Getter for the direction */
     public Vector getDirection() {
         return direction;
     }
 
     @Override
-   public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         if (this == obj) return true;
         return ((obj instanceof Ray other) &&
                 head.equals(other.head) &&
@@ -36,7 +37,7 @@ public class Ray {
         );
     }
 
-  @Override
+    @Override
     public String toString() {
         return "Ray{" +
                 "head=" + head +

@@ -10,7 +10,7 @@ public class Vector extends Point {
     /** Constructor based on three double values */
     public Vector(double d1, double d2, double d3) {
         super(d1, d2, d3);
-        if (d1 == 0 && d2 == 0 && d3 == 0)
+        if (Util.isZero(d1)&& Util.isZero(d2) && Util.isZero(d3))
             throw new IllegalArgumentException("Vector head cannot be Point(0,0,0)");
         ;
     }
@@ -34,16 +34,16 @@ public class Vector extends Point {
 
     /** scalar multipication of two vectors */
     public double dotProduct(Vector v){
-       Double3 temp = this.xyz.product(v.xyz);
-       return temp.d1 + temp.d2 + temp.d3;
+        Double3 temp = this.xyz.product(v.xyz);
+        return temp.d1 + temp.d2 + temp.d3;
     }
 
     /** cross product of two vectors */
     public Vector crossProduct(Vector v){
         return new Vector(
-            this.xyz.d2*v.xyz.d3 - this.xyz.d3*v.xyz.d2,
-            this.xyz.d3*v.xyz.d1 - this.xyz.d1*v.xyz.d3,
-            this.xyz.d1*v.xyz.d2 - this.xyz.d2*v.xyz.d1
+                this.xyz.d2*v.xyz.d3 - this.xyz.d3*v.xyz.d2,
+                this.xyz.d3*v.xyz.d1 - this.xyz.d1*v.xyz.d3,
+                this.xyz.d1*v.xyz.d2 - this.xyz.d2*v.xyz.d1
         );
     }
 
@@ -68,7 +68,7 @@ public class Vector extends Point {
         if (this == obj) return true;
         return ((obj instanceof Vector other) &&
                 (super.equals(obj))
-        );//////////////////
+        );
     }
 
     @Override

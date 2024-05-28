@@ -17,12 +17,12 @@ public class Point {
     }
 
     /** Constructor based on a Double3 value */
-   public Point(Double3 other) {
+    public Point(Double3 other) {
         xyz = other;
     }
 
 
-   @Override
+    @Override
     public String toString() {
         return xyz.toString();
     }
@@ -47,7 +47,7 @@ public class Point {
     public double distance(Point p) {
         return Math.sqrt(this.distanceSquared(p));
     }
-@Override
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         return  ((obj instanceof Point other)&&

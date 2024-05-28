@@ -45,13 +45,13 @@ class PlaneTest {
      * Test method for {@link geometries.Plane#getNormal(primitives.Point)}.
      */
     @Test
-   public void testPlaneGetNormal() {
+    public void testPlaneGetNormal() {
 
         // ============ Equivalence Partitions Tests ==============
 
         Plane plane2 = new Plane(new Point(1, 0, 0) ,  new Point(0, 1, 0),new Point(1, 1, 0));
         // TC01: test to see that the getNormal function works correctly
-       Vector normal1 = plane2.getNormal(new Point(1, 1, 0));
+        Vector normal1 = plane2.getNormal(new Point(1, 1, 0));
         assertTrue(normal1.equals(new Vector(0, 0, 1)) || normal1.equals(new Vector(0, 0, -1)), "getNormal() returned an incorrect result: " + normal1);
 
         // TC02: test to see that the getNormal function works correctly
