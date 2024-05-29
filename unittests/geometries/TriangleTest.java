@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import primitives.Point;
+import primitives.Ray;
+import primitives.Vector;
 class TriangleTest {
 
     /** Delta value for accuracy when comparing the numbers of type 'double' in assertEquals */
@@ -21,5 +23,17 @@ class TriangleTest {
         // TC02: test to see that the getNormal function returns one
         assertEquals(1, triangle.getNormal(new Point(0, 0, 0)).length(), DELTA, "getNormal() wrong result");
     }
+
+    @Test
+    public void testFindIntersections() {
+
+        // ============ Equivalence Partitions Tests ==============
+
+        //TC01: Ray's line is inside the triangle
+
+
+    }
+
+
 
 }
