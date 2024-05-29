@@ -159,6 +159,7 @@ class SphereTest {
         result = sphere.findIntersections(new Ray(new Point(0.5,0,0),new Vector(-0.5,1,0)));
         assertEquals(1, result.size(), "Wrong number of points");
         assertEquals( List.of(new Point(0.2,0.6,0)),result, "incorrect intersection point");
+        \
 
     }
 }
