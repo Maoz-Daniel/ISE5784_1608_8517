@@ -154,9 +154,11 @@ class SphereTest {
         // TC22: Ray's line is outside, ray is orthogonal to ray start to sphere's center line
         result = sphere.findIntersections(new Ray(new Point(3,0,0),v0m10));
         assertNull(result, "Ray's line is outside, ray is orthogonal to ray start to sphere's center line");
+
         // TC23: Ray's line is inside, ray is orthogonal to ray start to sphere's center line
-        result = sphere.findIntersections(new Ray(new Point(1.5,0,0),v0m10));
-        assertNull(result, "Ray's line is inside, ray is orthogonal to ray start to sphere's center line");
+        result = sphere.findIntersections(new Ray(new Point(0.5,0,0),new Vector(-0.5,1,0)));
+        assertEquals(1, result.size(), "Wrong number of points");
+        assertEquals( List.of(new Point(0.2,0.6,0)),result, "incorrect intersection point");
 
     }
 }
