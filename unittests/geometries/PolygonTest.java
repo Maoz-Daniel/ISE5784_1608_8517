@@ -2,11 +2,16 @@ package geometries;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import geometries.Polygon;
 import primitives.Point;
 import primitives.Vector;
+import primitives.Ray;
 
 /**
  * Testing Polygons
@@ -85,6 +90,49 @@ public class PolygonTest {
         for (int i = 0; i < 3; ++i)
             assertEquals(0d, result.dotProduct(pts[i].subtract(pts[i == 0 ? 3 : i - 1])), DELTA,
                     "Polygon's normal is not orthogonal to one of the edges");
+    }
+
+    /**
+     * Test method for {@link geometries.Polygon#findIntersections(primitives.Ray)}.
+     */
+    @Test
+    public void testFindIntersections() {
+
+        Point p100 = new Point(1, 0, 0);
+
+        Polygon polygon = new Polygon(new Point(2, 0, 0), new Point(0, 0, 2),
+                new Point(-2, 2, 2), new Point(0, 2, 0));
+
+        // ============ Equivalence Partitions Tests ==============
+
+        // TC01: Ray's line intersects the polygon (1 point)
+        var result = polygon.findIntersections(new Ray(p100, new Vector(-1, 1, 1)));
+        assertEquals(1, result.size(), "Wrong number of points");
+        assertEquals(List.of(new Point(0, 1, 1)), result, "Ray's line intersects the polygon");
+
+        // TC02: Ray's line out of polygon and in front the edge (0 points)
+        result = polygon.findIntersections(new Ray(p100, new Vector(0.3, -0.8, 1.5)));
+        assertNull(result, "Ray's line out of polygon and in front the edge");
+
+        // TC03: Ray's line out of polygon and in front the vertex (0 points)
+        result = polygon.findIntersections(new Ray(p100, new Vector(0, -0.5, 2.5)));
+        assertNull(result, "Ray's line out of polygon and in front the vertex");
+
+        // =============== Boundary Values Tests ==================
+
+        // TC11: Ray's line intersects the edge (0 points)
+        result = polygon.findIntersections(new Ray(p100, new Vector(0, 0, 1)));
+        assertNull(result, "Ray's line intersects the edge");
+
+        // TC12: Ray's line intersects the vertex (0 points)
+        result= polygon.findIntersections(new Ray(p100, new Vector(-1, 0, 2)));
+        assertNull(result, "Ray's line intersects the vertex");
+
+        // TC13: Ray's line intersects the edge's continuation (0 points)
+        result = polygon.findIntersections(new Ray(p100, new Vector(0, -1, 2)));
+        assertNull(result, "Ray's line intersects the edge's continuation");
+
+
     }
 
 }
