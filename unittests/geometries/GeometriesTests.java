@@ -1,12 +1,12 @@
-import geometries.*;
+package geometries;
+
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
-import geometries.Sphere;
+
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
-
 
 
 
@@ -19,13 +19,16 @@ public class GeometriesTests {
 
     Geometries geometries = new Geometries(sphere, triangle, plane, polygon);
 
+    /**
+     * Test method for {@link geometries.Geometries#findIntersections(primitives.Ray)}.
+     */
     @Test
     void testFindIntersections() {
 
         /// ============ Equivalence Partitions Tests ==============
 
         // TC01: test to see that the findIntersections function works correctly when ray intersects some of the geometries
-        Ray ray = new Ray(new Point(0, -2, 0), new Vector(0, 0, 1));
+        Ray ray = new Ray(new Point(0, -2, -7), new Vector(0, 0, 1));
         List<Point> result = geometries.findIntersections(ray);
         assertEquals(4, result.size(), "findIntersections() did not find the correct number of intersections");
 
@@ -51,10 +54,6 @@ public class GeometriesTests {
         ray = new Ray(new Point(0, -2, 0), new Vector(0, 0, 1));
         result = geometriesEmpty.findIntersections(ray);
         assertNull(result, "findIntersections() did not find the correct number of intersections");
-
-
-
-
 
 
     }

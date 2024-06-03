@@ -40,7 +40,22 @@ public class Geometries implements Intersectable {
         }
     }
 
+    /**
+     * find intersections of a ray with the geometries
+     * @param ray
+     * @return list of intersections
+     */
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        List<Point> intersections = null;
+        for (Intersectable geo : _geometries) {
+            List<Point> tempIntersections = geo.findIntersections(ray);
+            if (tempIntersections != null) {
+                if (intersections == null) {
+                    intersections = new LinkedList<Point>();
+                }
+                intersections.addAll(tempIntersections);
+            }
+        }
+        return intersections;
     }
 }
