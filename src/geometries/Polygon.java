@@ -6,6 +6,7 @@ import static primitives.Util.isZero;
 
 import primitives.Point;
 import primitives.Vector;
+import primitives.Ray;
 
 /**
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
@@ -82,9 +83,43 @@ public class Polygon implements Geometry {
    @Override
    public Vector getNormal(Point point) { return plane.getNormal(); }
 
-    @Override
-    public List<Point> findIntersections(primitives.Ray ray) {
+   @Override
+   public List<Point> findIntersections(Ray ray) {
+      var intersections = plane.findIntersections(ray); // Get the intersection point with the plane
+      if (intersections == null) {
+         return null;
+      }
 
-      return null;
-    }
+      Point P0 = ray.getHead();
+      Vector v = ray.getDirection();
+
+      boolean positive = false;
+      boolean firstIteration = true;
+
+      for (int i = 0; i < vertices.size(); i++) {// Check if the intersection point is inside the polygon
+         Point P1 = vertices.get(i);
+         Point P2 = vertices.get((i + 1) % vertices.size());
+
+         Vector v1 = P1.subtract(P0);
+         Vector v2 = P2.subtract(P0);
+
+         Vector N = v1.crossProduct(v2).normalize();
+         double sign = v.dotProduct(N);
+
+         if (isZero(sign)) {
+            return null;
+         }
+
+         if (firstIteration) {
+            positive = sign > 0;
+            firstIteration = false;
+         } else {
+            if (positive != (sign > 0)) {
+               return null;
+            }
+         }
+      }
+
+      return intersections;
+   }
 }

@@ -97,7 +97,9 @@ class SphereTest {
 
         // TC11: Ray starts at sphere and goes inside (1 points)
         Point onSpherePoint = new Point(1, 1, 0);
-         result = sphere.findIntersections(new Ray(onSpherePoint, new Vector(1, -1, 0)));
+         result = sphere.findIntersections(new Ray(onSpherePoint, new Vector(1, -1, 0))).stream()
+                 .sorted(Comparator.comparingDouble(p -> p.distance(p01))) // Corrected lambda syntax
+                 .collect(Collectors.toList());;
         assertEquals(1, result.size(), "Wrong number of points");
         assertEquals( List.of(p200),result, "incorrect intersection point");
 
@@ -109,7 +111,9 @@ class SphereTest {
         // **** Group: Ray's line goes through the center
 
         // TC13: Ray starts before the sphere (2 points)
-        result = sphere.findIntersections(new Ray(p01,v100));
+        result = sphere.findIntersections(new Ray(p01,v100)).stream()
+                .sorted(Comparator.comparingDouble(p -> p.distance(p01))) // Corrected lambda syntax
+                .collect(Collectors.toList());;
         assertEquals(2, result.size(), "Wrong number of points");
         assertEquals( List.of(p000, p200),result, "incorrect intersection point");
 
@@ -159,7 +163,7 @@ class SphereTest {
         result = sphere.findIntersections(new Ray(new Point(0.5,0,0),new Vector(-0.5,1,0)));
         assertEquals(1, result.size(), "Wrong number of points");
         assertEquals( List.of(new Point(0.2,0.6,0)),result, "incorrect intersection point");
-        \
+
 
     }
 }

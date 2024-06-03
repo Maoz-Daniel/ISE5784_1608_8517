@@ -30,11 +30,13 @@ public class Sphere extends RadialGeometry{
     @Override
     public List<Point> findIntersections(Ray ray) {
 
+        Point head = ray.getHead();
+        Vector dir = ray.getDirection();
         if(ray.getHead().equals(center)){ // if the ray starts at the center of the sphere
             return List.of(ray.getPoint(radius));
         }
 
-        Vector u = center.subtract(ray.getHead()); // u = O - P0
+        Vector u = center.subtract(head); // u = O - P0
         double tm = ray.getDirection().dotProduct(u); // tm = V . u
         if (Util.isZero(tm)) { // if the sphere is behind the ray
            if( u.length() >= radius){
@@ -57,6 +59,9 @@ public class Sphere extends RadialGeometry{
         if (t1 > 0 && t2 > 0 ) { // if the sphere is behind the ray
             Point p1 = ray.getPoint(t1); // P1 = P0 + t1 * V
             Point p2 = ray.getPoint(t2); // P2 = P0 + t2 * V
+            if(p1.subtract(head).length() > p2.subtract(head).length()){
+                return List.of(p2, p1);
+            }
             return List.of(p1, p2);
         }
         if (t1 > 0) { // if the sphere is behind the ray
