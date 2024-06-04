@@ -37,6 +37,7 @@ public class Camera implements Cloneable {
 
     }
 
+
     /**
      * get the point of the camera
      * @return
@@ -93,6 +94,10 @@ public class Camera implements Cloneable {
         return distance;
     }
 
+    public static Builder getBuilder() {
+        return new Builder();
+    }
+
     /**
      * construct a ray through a pixel in the view plane
      * @param nX number of pixels in the columns
@@ -102,7 +107,18 @@ public class Camera implements Cloneable {
      * @return the ray through the pixel
      */
     public Ray constructRay(int nX, int nY, int j, int i) { //nx is the number of pixels in the columns, ny is the number of pixels in the rows
-        return null;
+        Point pIJ = p0.add(vTo.scale(distance));
+        double rY = height / nY;
+        double rX = width / nX;
+        double yI = (i - nY / 2d) * rY + rY / 2d;
+        double xJ = (j - nX / 2d) * rX + rX / 2d;
+        if (!Util.isZero(xJ)) {
+            pIJ = pIJ.add(vRight.scale(xJ));
+        }
+        if (!Util.isZero(yI)) {
+            pIJ = pIJ.add(vUp.scale(-yI));
+        }
+        return new Ray(p0, pIJ.subtract(p0).normalize());
     }
 
     /**
@@ -118,6 +134,10 @@ public class Camera implements Cloneable {
 //           camera.vRight = _vTo.crossProduct(_vUp).normalize();
 //       }
 
+        public Builder setLocation(Point _p0) {
+            camera.p0 = _p0;
+            return this;
+        }
 
         public Builder setDirections( Vector _vUp, Vector _vTo) {
 
@@ -160,10 +180,11 @@ public class Camera implements Cloneable {
             if(camera.distance==0.0) {
                 throw new MissingResourceException("missing camera parameters", "Camera", "distance is missing");
             }
-            // maybe add anvalid check for the vectors
+            // maybe add invalid check for the vectors
 
+            camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
 
-
+            return (Camera) camera.clone();
         }
 
     }
