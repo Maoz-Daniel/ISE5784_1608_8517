@@ -33,7 +33,7 @@ public class Camera implements Cloneable {
     /** The distance of the view plane */
     private double distance= 0.0;
 
-    private Camera() {
+    public Camera() {
 
     }
 
@@ -106,7 +106,7 @@ public class Camera implements Cloneable {
      * @param i the row index of the pixel
      * @return the ray through the pixel
      */
-    public Ray constructRay(int nX, int nY, int j, int i) { //nx is the number of pixels in the columns, ny is the number of pixels in the rows
+    public Ray constructRay(double nX, double nY, int j, int i) { //nx is the number of pixels in the columns, ny is the number of pixels in the rows
         Point pIJ = p0.add(vTo.scale(distance));
         double rY = height / nY;
         double rX = width / nX;
