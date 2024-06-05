@@ -7,8 +7,8 @@ import java.util.Comparator;
 import java.util.MissingResourceException;
 import java.util.stream.Collectors;
 
-/*
-    * Camera class represents a camera in 3D Cartesian coordinate
+/**
+ * Camera class represents a camera in 3D Cartesian coordinate
  */
 public class Camera implements Cloneable {
 
@@ -33,7 +33,7 @@ public class Camera implements Cloneable {
     /** The distance of the view plane */
     private double distance= 0.0;
 
-    public Camera() {
+    private Camera() {
 
     }
 
@@ -106,23 +106,38 @@ public class Camera implements Cloneable {
      * @param i the row index of the pixel
      * @return the ray through the pixel
      */
-    public Ray constructRay(double nX, double nY, int j, int i) { //nx is the number of pixels in the columns, ny is the number of pixels in the rows
-        Point pIJ = p0.add(vTo.scale(distance));
-        double rY = height / nY;
-        double rX = width / nX;
-        double yI = (i - nY / 2d) * rY + rY / 2d;
-        double xJ = (j - nX / 2d) * rX + rX / 2d;
+    public Ray constructRay(int nX, int nY, int j, int i) {
+        // Calculate the center point of the view plane
+        Point pc = p0.add(vTo.scale(distance));
+
+        // Calculate the height and width of a pixel
+        double rY = height / (double) nY; // height of a single pixel
+        double rX = width / (double) nX;  // width of a single pixel
+
+        // Calculate the x and y offsets of the pixel from the center of the view plane
+        double xJ = (j - (nX - 1) / 2.0) * rX; // Correct calculation of x coordinate
+        double yI = -(i - (nY - 1) / 2.0) * rY; // Correct calculation of y coordinate
+
+        // Start at the center of the view plane
+        Point pIJ = pc;
+
+        // Adjust the point based on the x and y offsets
         if (!Util.isZero(xJ)) {
             pIJ = pIJ.add(vRight.scale(xJ));
         }
         if (!Util.isZero(yI)) {
-            pIJ = pIJ.add(vUp.scale(-yI));
+            pIJ = pIJ.add(vUp.scale(yI)); // Typically, the y direction is inverted in image coordinates
         }
-        return new Ray(p0, pIJ.subtract(p0).normalize());
+
+        // Create the ray from the camera origin to the pixel on the view plane
+        Vector direction = pIJ.subtract(p0);
+        return new Ray(p0, direction);
     }
 
+
+
     /**
-     * Camera builder
+     * Camera builder class
      */
     public static class Builder {
         private final Camera camera = new Camera();
@@ -139,7 +154,7 @@ public class Camera implements Cloneable {
             return this;
         }
 
-        public Builder setDirections( Vector _vUp, Vector _vTo) {
+        public Builder setDirections(Vector _vTo , Vector _vUp) {
 
             if(!Util.isZero(_vUp.dotProduct(_vTo)))
                 throw new IllegalArgumentException("vUp and vTo are not orthogonal");

@@ -7,6 +7,9 @@ import primitives.Ray;
 import primitives.Vector;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing Tube class
+ */
 class TubeTest {
 
     /** Delta value for accuracy when comparing the numbers of type 'double' in assertEquals */

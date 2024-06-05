@@ -9,6 +9,9 @@ import primitives.Vector;
 
 import java.util.List;
 
+/**
+ * Testing Triangle class
+ */
 class TriangleTest {
 
     /** Delta value for accuracy when comparing the numbers of type 'double' in assertEquals */

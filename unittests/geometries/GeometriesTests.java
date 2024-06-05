@@ -9,7 +9,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-
+/**
+ * Testing Geometries class
+ */
 public class GeometriesTests {
     Sphere sphere = new Sphere(new Point(0, -2, 0), 3);
     Triangle triangle = new Triangle(new Point(4, 0, 0), new Point(-2, 0, 0), new Point(0, 0, 4));

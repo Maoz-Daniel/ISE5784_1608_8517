@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing Vectors
+ */
 class VectorTest {
 
     /** Delta value for accuracy when comparing the numbers of type 'double' in assertEquals */

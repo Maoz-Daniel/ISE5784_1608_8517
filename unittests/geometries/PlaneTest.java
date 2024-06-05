@@ -6,7 +6,9 @@ import primitives.Vector;
 import primitives.Ray;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * Testing Plane class
+ */
 class PlaneTest {
 
     /** Delta value for accuracy when comparing the numbers of type 'double' in assertEquals */

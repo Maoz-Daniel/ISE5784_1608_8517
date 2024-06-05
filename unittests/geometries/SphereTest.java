@@ -11,7 +11,9 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+/**
+ * Testing Plane class
+ */
 class SphereTest {
 
     /** Delta value for accuracy when comparing the numbers of type 'double' in assertEquals */

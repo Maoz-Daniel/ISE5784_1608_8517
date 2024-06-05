@@ -7,6 +7,9 @@ import  primitives.Ray;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+/**
+ * Testing Ray class
+ */
 public class RayTest {
 
     /**
