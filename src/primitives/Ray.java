@@ -1,5 +1,7 @@
 package primitives;
 
+import java.util.List;
+
 /**
  * Class Ray is the basic class representing a ray in a 3D system.
  * param head - the ray head
@@ -55,5 +57,25 @@ public class Ray {
              return head;
         }
         return head.add(direction.scale(t));
+    }
+
+    /**
+     * Find the closest point to the head of the ray
+     * @param points
+     * @return
+     */
+    public Point findClosestPoint(List<Point> points) {
+        if(points == null || points.isEmpty())
+            return null;
+        Point closest = null;
+        double minDistance = Double.MAX_VALUE;
+        for (Point point : points) {
+            double distance = head.distance(point);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closest = point;
+            }
+        }
+        return closest;
     }
 }

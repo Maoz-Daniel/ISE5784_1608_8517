@@ -14,8 +14,8 @@ public class ImageWriterTest {
     @Test
     public void testWriteToImageTest() {
         ImageWriter imageWriter = new ImageWriter("test", 800, 500);
-        Color Orange = new Color(ORANGE);
-        Color Blue = new Color(BLUE);
+        Color Orange = new Color(225,116,14);
+        Color Blue = new Color(86,123,255);
 
         for (int i = 0; i < 800; i++)
             for (int j = 0; j < 500; j++)
