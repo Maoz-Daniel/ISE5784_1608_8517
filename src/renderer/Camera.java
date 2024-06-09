@@ -3,6 +3,9 @@ import primitives.Point;
 import primitives.Util;
 import primitives.Vector;
 import primitives.Ray;
+import renderer.ImageWriter;
+import renderer.RayTracerBase;
+import primitives.Color;
 import java.util.Comparator;
 import java.util.MissingResourceException;
 import java.util.stream.Collectors;
@@ -32,6 +35,10 @@ public class Camera implements Cloneable {
 
     /** The distance of the view plane */
     private double distance= 0.0;
+
+    private ImageWriter imageWriter;
+
+    private RayTracerBase rayTracer;
 
     private Camera() {
 
@@ -142,12 +149,6 @@ public class Camera implements Cloneable {
     public static class Builder {
         private final Camera camera = new Camera();
 
-//        public Builder(Point _p0, Vector _vUp, Vector _vTo) {
-//            camera.p0 = _p0;
-//          camera.vUp = _vUp;
-//            camera.vTo = _vTo;
-//           camera.vRight = _vTo.crossProduct(_vUp).normalize();
-//       }
 
         public Builder setLocation(Point _p0) {
             camera.p0 = _p0;
@@ -176,6 +177,16 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        public Builder setImageWriter(ImageWriter _imageWriter) {
+            camera.imageWriter = _imageWriter;
+            return this;
+        }
+
+        public Builder setRayTracer(RayTracerBase _rayTracer) {
+            camera.rayTracer = _rayTracer;
+            return this;
+        }
+
         public Camera build() {
             if(camera.p0== null) {
                 throw new MissingResourceException("missing camera parameters", "Camera", "p0 is missing");
@@ -195,6 +206,12 @@ public class Camera implements Cloneable {
             if(camera.distance==0.0) {
                 throw new MissingResourceException("missing camera parameters", "Camera", "distance is missing");
             }
+            if(camera.imageWriter==null) {
+                throw new MissingResourceException("missing camera parameters", "Camera", "imageWriter is missing");
+            }
+            if(camera.rayTracer==null) {
+                throw new MissingResourceException("missing camera parameters", "Camera", "rayTracer is missing");
+            }
             // maybe add invalid check for the vectors
 
             camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
@@ -212,4 +229,62 @@ public class Camera implements Cloneable {
             return null;
         }
     }
+
+    /**
+     * Render the image
+     */
+    public void renderImage() {
+        if (rayTracer == null) {
+            throw new MissingResourceException("missing ray tracer", "Camera", "rayTracer is missing");
+        }
+        if (imageWriter == null) {
+            throw new MissingResourceException("missing image writer", "Camera", "imageWriter is missing");
+        }
+
+        // Calculate the number of pixels in the rows and columns
+        int nX = imageWriter.getNx();
+        int nY = imageWriter.getNy();
+
+        // Render the image
+        for (int i = 0; i < nY; i++) {
+            for (int j = 0; j < nX; j++) {
+                castRays(nX, nY, j, i);
+            }
+        }
+    }
+
+    /**
+     * Print a grid on the view plane
+     * @param interval the interval between the grid lines
+     * @param color the color of the grid lines
+     */
+    public void printGrid(int interval, Color color) {
+        ImageWriter imageWriter = new ImageWriter("test", 800, 500);
+
+
+
+        //draw only the grid lines
+        for (int i = 0; i < 800; i++)
+            for (int j = 0; j < 500; j++)
+                if (i % interval == 0 || j % interval == 0)
+                    imageWriter.writePixel(i, j, color); // 16x10 grid
+        imageWriter.writeToImage();
+    }
+    /**
+     * Write the image to a file
+     */
+    public void writeToImage() {
+        if (imageWriter == null) {
+            throw new MissingResourceException("missing image writer", "Camera", "imageWriter is missing");
+        }
+        imageWriter.writeToImage();
+    }
+
+    public void castRays(int nX, int nY, int column, int row) {
+        Ray ray = constructRay(nX, nY, column, row);
+        Color color = rayTracer.RayTracerBase(ray);
+        imageWriter.writePixel(column, row, color);
+
+    }
+
 }
