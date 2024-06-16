@@ -3,12 +3,9 @@ import primitives.Point;
 import primitives.Util;
 import primitives.Vector;
 import primitives.Ray;
-import renderer.ImageWriter;
-import renderer.RayTracerBase;
 import primitives.Color;
-import java.util.Comparator;
+
 import java.util.MissingResourceException;
-import java.util.stream.Collectors;
 
 /**
  * Camera class represents a camera in 3D Cartesian coordinate
@@ -155,7 +152,7 @@ public class Camera implements Cloneable {
             return this;
         }
 
-        public Builder setDirections(Vector _vTo , Vector _vUp) {
+        public Builder setDirection(Vector _vTo , Vector _vUp) {
 
             if(!Util.isZero(_vUp.dotProduct(_vTo)))
                 throw new IllegalArgumentException("vUp and vTo are not orthogonal");
@@ -212,7 +209,6 @@ public class Camera implements Cloneable {
             if(camera.rayTracer==null) {
                 throw new MissingResourceException("missing camera parameters", "Camera", "rayTracer is missing");
             }
-            // maybe add invalid check for the vectors
 
             camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
 
@@ -233,13 +229,8 @@ public class Camera implements Cloneable {
     /**
      * Render the image
      */
-    public void renderImage() {
-        if (rayTracer == null) {
-            throw new MissingResourceException("missing ray tracer", "Camera", "rayTracer is missing");
-        }
-        if (imageWriter == null) {
-            throw new MissingResourceException("missing image writer", "Camera", "imageWriter is missing");
-        }
+    public Camera renderImage() {
+
 
         // Calculate the number of pixels in the rows and columns
         int nX = imageWriter.getNx();
@@ -251,6 +242,7 @@ public class Camera implements Cloneable {
                 castRays(nX, nY, j, i);
             }
         }
+        return this;
     }
 
     /**
@@ -258,33 +250,44 @@ public class Camera implements Cloneable {
      * @param interval the interval between the grid lines
      * @param color the color of the grid lines
      */
-    public void printGrid(int interval, Color color) {
-        ImageWriter imageWriter = new ImageWriter("test", 800, 500);
+    public Camera printGrid(int interval, Color color) {
 
 
+        // Calculate the number of pixels in the rows and columns
+        int nX = imageWriter.getNx();
+        int nY = imageWriter.getNy();
 
-        //draw only the grid lines
-        for (int i = 0; i < 800; i++)
-            for (int j = 0; j < 500; j++)
-                if (i % interval == 0 || j % interval == 0)
-                    imageWriter.writePixel(i, j, color); // 16x10 grid
-        imageWriter.writeToImage();
+        // Render the grid
+        for (int i = 0; i < nY; i++) {
+            for (int j = 0; j < nX; j++) {
+                if (i % interval == 0 || j % interval == 0) {
+                    imageWriter.writePixel(j, i, color);
+                }
+            }
+        }
+        return this;
     }
+
     /**
      * Write the image to a file
      */
-    public void writeToImage() {
-        if (imageWriter == null) {
-            throw new MissingResourceException("missing image writer", "Camera", "imageWriter is missing");
-        }
+    public Camera writeToImage() {
+
         imageWriter.writeToImage();
+        return this;
     }
 
-    public void castRays(int nX, int nY, int column, int row) {
+    /**
+     * Cast rays through a pixel in the view plane
+     * @param nX number of pixels in the columns
+     * @param nY number of pixels in the rows
+     * @param column the column index of the pixel
+     * @param row the row index of the pixel
+     */
+    private void castRays(int nX, int nY, int column, int row) {
         Ray ray = constructRay(nX, nY, column, row);
-        Color color = rayTracer.RayTracerBase(ray);
+        Color color = rayTracer.TraceRay(ray);
         imageWriter.writePixel(column, row, color);
-
     }
 
 }

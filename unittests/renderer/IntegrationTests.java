@@ -9,8 +9,7 @@ import geometries.Sphere;
 import geometries.Plane;
 import geometries.Triangle;
 
-
-import org.junit.jupiter.api.Test;
+import scene.Scene;
 
 public class IntegrationTests {
 
@@ -39,18 +38,22 @@ public class IntegrationTests {
 
         //TC01: test to see that the camera rays intersect the sphere when the sphere radius is 1
         Camera camera = new Camera.Builder().setLocation(new Point(0, 0, 0))
-                .setDirections( Vto, Vup)
+                .setDirection( Vto, Vup)
                 .setVpDistance(1)
-                .setVpSize(3, 3).build();
+                .setVpSize(3, 3)
+                .setImageWriter(new ImageWriter("test", 800, 500))
+                .setRayTracer(new SimpleRayTracer(new Scene("Test"))).build();
 
         Sphere sphere = new Sphere(new Point(0, 0, -3), 1);
         assertEquals(2, counterPixel(sphere, camera), "ERROR: wrong number of intersections");
 
         //TC02: test to see that the camera rays intersect the sphere when the sphere radius is 2.5
         camera = new Camera.Builder().setLocation(new Point(0, 0, 0.5))
-                .setDirections( Vto,Vup)
+                .setDirection( Vto,Vup)
                 .setVpDistance(1)
-                .setVpSize(3, 3).build();
+                .setVpSize(3, 3)
+                .setRayTracer(new SimpleRayTracer(new Scene("Test")))
+                .setImageWriter(new ImageWriter("test", 800, 500)).build();
 
         sphere = new Sphere(new Point(0, 0, -2.5), 2.5);
         assertEquals(18, counterPixel(sphere, camera), "ERROR: wrong number of intersections");
@@ -76,9 +79,11 @@ public class IntegrationTests {
     @Test
     public void testCameraPlane() {
         Camera camera = new Camera.Builder().setLocation(new Point(0, 0, 0))
-                .setDirections(new Vector(0, 0, -1), new Vector(0, 1, 0))
+                .setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
                 .setVpDistance(1)
-                .setVpSize(3, 3).build();
+                .setVpSize(3, 3)
+                .setImageWriter(new ImageWriter("test", 1, 1))
+                .setRayTracer(new SimpleRayTracer(new Scene("Test"))).build();
 
         //TC01: test to see that the camera rays intersect the plane when the plane is parallel to the view plane
         Plane plane = new Plane(new Point(1,1,-5), new Vector(0,0,1));
@@ -100,9 +105,11 @@ public class IntegrationTests {
         Point p1m1m2 = new Point(1,-1,-2);
 
         Camera camera = new Camera.Builder().setLocation(new Point(0, 0, 0.5))
-                .setDirections(new Vector(0, 0, -1) , new Vector(0, 1, 0))
+                .setDirection(new Vector(0, 0, -1) , new Vector(0, 1, 0))
                 .setVpDistance(1)
-                .setVpSize(3, 3).build();
+                .setVpSize(3, 3)
+                .setRayTracer(new SimpleRayTracer(new Scene("Test")))
+                .setImageWriter(new ImageWriter("test", 800, 500)).build();
 
         //TC01: test to see that the camera rays intersect the triangle when the triangle is parallel to the view plane
         Triangle triangle = new Triangle(pm1m1m2, p1m1m2, new Point(0,1,-2));
