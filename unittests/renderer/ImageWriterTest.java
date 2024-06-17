@@ -8,9 +8,14 @@ import static java.awt.Color.ORANGE;
 
 
 
-
+/**
+ * Testing ImageWriter Class
+ */
 public class ImageWriterTest {
 
+    /**
+     * Test method for {@link ImageWriter#writeToImage()}.
+     */
     @Test
     public void testWriteToImageTest() {
         ImageWriter imageWriter = new ImageWriter("test", 800, 500);

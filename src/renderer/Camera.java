@@ -146,12 +146,22 @@ public class Camera implements Cloneable {
     public static class Builder {
         private final Camera camera = new Camera();
 
-
+        /**
+         * Set the location of the camera
+         * @param _p0 the location of the camera
+         * @return the builder
+         */
         public Builder setLocation(Point _p0) {
             camera.p0 = _p0;
             return this;
         }
 
+        /**
+         * Set the direction of the camera
+         * @param _vTo the direction of the camera
+         * @param _vUp the up vector of the camera
+         * @return the builder
+         */
         public Builder setDirection(Vector _vTo , Vector _vUp) {
 
             if(!Util.isZero(_vUp.dotProduct(_vTo)))
@@ -163,27 +173,52 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        /**
+         * Set the view plane size
+         * @param _width the width of the view plane
+         * @param _height the height of the view plane
+         * @return the builder
+         */
         public Builder setVpSize(double _width, double _height) {
             camera.width = _width;
             camera.height = _height;
             return this;
         }
 
+        /**
+         * Set the distance of the view plane
+         * @param _distance the distance of the view plane
+         * @return the builder
+         */
         public Builder setVpDistance(double _distance) {
             camera.distance = _distance;
             return this;
         }
 
+        /**
+         * Set the image writer
+         * @param _imageWriter the image writer
+         * @return the builder
+         */
         public Builder setImageWriter(ImageWriter _imageWriter) {
             camera.imageWriter = _imageWriter;
             return this;
         }
 
+        /**
+         * Set the ray tracer
+         * @param _rayTracer the ray tracer
+         * @return the builder
+         */
         public Builder setRayTracer(RayTracerBase _rayTracer) {
             camera.rayTracer = _rayTracer;
             return this;
         }
 
+        /**
+         * Build the camera
+         * @return the camera
+         */
         public Camera build() {
             if(camera.p0== null) {
                 throw new MissingResourceException("missing camera parameters", "Camera", "p0 is missing");

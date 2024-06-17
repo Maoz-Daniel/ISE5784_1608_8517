@@ -11,8 +11,17 @@ import geometries.Triangle;
 
 import scene.Scene;
 
+/**
+ * Integration tests for the camera and the geometries
+ */
 public class IntegrationTests {
 
+    /**
+     * A function that counts the number of intersections between the camera rays and the geometry
+     * @param geometry the geometry to check the intersections with
+     * @param camera the camera to check the intersections with
+     * @return the number of intersections
+     */
     public int counterPixel(Geometry geometry, Camera camera) {
         int width = (int)camera.getWidth();
         int height = (int)camera.getHeight();
@@ -31,6 +40,9 @@ public class IntegrationTests {
     }
 
 
+    /**
+     * Test method for the camera and the sphere
+     */
     @Test
    public void testCameraSphere() {
         Vector Vto = new Vector(0, 0, -1);
@@ -76,6 +88,9 @@ public class IntegrationTests {
     }
 
 
+    /**
+     * Test method for the camera and the plane
+     */
     @Test
     public void testCameraPlane() {
         Camera camera = new Camera.Builder().setLocation(new Point(0, 0, 0))
@@ -99,6 +114,9 @@ public class IntegrationTests {
 
     }
 
+    /**
+     * Test method for the camera and the triangle
+     */
     @Test
     public void testCameraTriangle() {
         Point pm1m1m2 = new Point(-1,-1,-2);

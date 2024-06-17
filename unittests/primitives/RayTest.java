@@ -37,6 +37,9 @@ public class RayTest {
 
     }
 
+    /**
+     * Test method for {@link Ray#findClosestPoint(List)}.
+     */
     @Test
     public void testRayFindClosestPoint(){
         Ray ray = new Ray(new Point(1, 1, 0), new Vector(1, 1, 0));
