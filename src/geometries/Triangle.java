@@ -4,7 +4,6 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Util;
 import primitives.Vector;
-
 import java.util.List;
 
 /**
@@ -25,8 +24,8 @@ public class Triangle extends Polygon {
 
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
-        var intersections = plane.findIntersections(ray);
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        var intersections = plane.findGeoIntersections(ray);
         if (intersections == null) {
             return null;
         }

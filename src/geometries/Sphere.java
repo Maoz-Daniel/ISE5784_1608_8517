@@ -28,12 +28,11 @@ public class Sphere extends RadialGeometry{
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
 
         Point head = ray.getHead();
-        Vector dir = ray.getDirection();
         if(ray.getHead().equals(center)){ // if the ray starts at the center of the sphere
-            return List.of(ray.getPoint(radius));
+            return List.of(new GeoPoint(this, ray.getPoint(radius)));
         }
 
         Vector u = center.subtract(head); // u = O - P0
@@ -43,7 +42,7 @@ public class Sphere extends RadialGeometry{
                return null;
            }
               double t = Math.sqrt(radius * radius - u.lengthSquared()); // t = sqrt(R^2 - ||u||^2)
-            return List.of(ray.getPoint(t)); // P = P0 + t * V
+            return List.of(new GeoPoint(this,ray.getPoint(t))); // P = P0 + t * V
         }
 
 
@@ -60,20 +59,25 @@ public class Sphere extends RadialGeometry{
             Point p1 = ray.getPoint(t1); // P1 = P0 + t1 * V
             Point p2 = ray.getPoint(t2); // P2 = P0 + t2 * V
             if(p1.subtract(head).length() > p2.subtract(head).length()){
-                return List.of(p2, p1);
+                return List.of(new GeoPoint(this, p2), new GeoPoint(this, p1));
             }
-            return List.of(p1, p2);
+            return List.of(new GeoPoint(this, p2), new GeoPoint(this, p1));
         }
         if (t1 > 0) { // if the sphere is behind the ray
             Point p1 = ray.getPoint(t1); // P1 = P0 + t1 * V
-            return List.of(p1);
+            return List.of( new GeoPoint(this, p1));
         }
         if (t2 > 0) { // if the sphere is behind the ray
             Point p2 = ray.getPoint(t2); // P2 = P0 + t2 * V
-            return List.of(p2);
+            return List.of(new GeoPoint(this, p2));
         }
         return null;
 
 
+    }
+
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        return List.of();
     }
 }

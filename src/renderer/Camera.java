@@ -220,29 +220,33 @@ public class Camera implements Cloneable {
          * @return the camera
          */
         public Camera build() {
+
+            String errorMessage = "missing camera parameters";
+            String errorSource = "Camera";
+
             if(camera.p0== null) {
-                throw new MissingResourceException("missing camera parameters", "Camera", "p0 is missing");
+               throw new MissingResourceException(errorMessage, errorSource, "p0 is missing");
             }
             if(camera.vUp==null) {
-                throw new MissingResourceException("missing camera parameters", "Camera", "vUp is missing");
-            }
+                throw new MissingResourceException(errorMessage, errorSource, "vUp is missing");
+                    }
             if(camera.vTo==null) {
-                throw new MissingResourceException("missing camera parameters", "Camera", "vTo is missing");
+                throw new MissingResourceException(errorMessage, errorSource, "vTo is missing");
             }
             if(camera.width==0.0) {
-                throw new MissingResourceException("missing camera parameters", "Camera", "width is missing");
+                throw new MissingResourceException(errorMessage, errorSource, "width is missing");
             }
             if(camera.height==0.0) {
-                throw new MissingResourceException("missing camera parameters", "Camera", "height is missing");
-            }
+                throw new MissingResourceException(errorMessage, errorSource, "height is missing");
+                }
             if(camera.distance==0.0) {
-                throw new MissingResourceException("missing camera parameters", "Camera", "distance is missing");
+                throw new MissingResourceException(errorMessage, errorSource, "distance is missing");
             }
             if(camera.imageWriter==null) {
-                throw new MissingResourceException("missing camera parameters", "Camera", "imageWriter is missing");
+                throw new MissingResourceException(errorMessage, errorSource, "imageWriter is missing");
             }
             if(camera.rayTracer==null) {
-                throw new MissingResourceException("missing camera parameters", "Camera", "rayTracer is missing");
+                throw new MissingResourceException(errorMessage, errorSource, "rayTracer is missing");
             }
 
             camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();

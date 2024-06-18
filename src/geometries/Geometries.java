@@ -12,7 +12,7 @@ import java.util.List;
  * in 3D Cartesian coordinate system
  *
  */
-public class Geometries implements Intersectable {
+public class Geometries extends Intersectable {
 
     private final LinkedList<Intersectable> _geometries = new LinkedList<Intersectable>();
 
@@ -45,13 +45,14 @@ public class Geometries implements Intersectable {
      * @param ray
      * @return list of intersections
      */
-    public List<Point> findIntersections(Ray ray) {
-        List<Point> intersections = null;
+    @Override
+   protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        List<GeoPoint> intersections = null;
         for (Intersectable geo : _geometries) {
-            List<Point> tempIntersections = geo.findIntersections(ray);
+            List<GeoPoint> tempIntersections =  geo.findGeoIntersectionsHelper(ray) ;
             if (tempIntersections != null) {
                 if (intersections == null) {
-                    intersections = new LinkedList<Point>();
+                    intersections = new LinkedList<GeoPoint>();
                 }
                 intersections.addAll(tempIntersections);
             }

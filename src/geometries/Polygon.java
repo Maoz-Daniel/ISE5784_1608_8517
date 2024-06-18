@@ -13,7 +13,7 @@ import primitives.Ray;
  * system
  * @author Dan
  */
-public class Polygon implements Geometry {
+public class Polygon extends Geometry {
    /** List of polygon's vertices */
    protected final List<Point> vertices;
    /** Associated plane in which the polygon lays */
@@ -84,8 +84,8 @@ public class Polygon implements Geometry {
    public Vector getNormal(Point point) { return plane.getNormal(); }
 
    @Override
-   public List<Point> findIntersections(Ray ray) {
-      var intersections = plane.findIntersections(ray); // Get the intersection point with the plane
+   protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+      var intersections = plane.findGeoIntersectionsHelper(ray); // Get the intersection point with the plane
       if (intersections == null) {
          return null;
       }
@@ -122,4 +122,7 @@ public class Polygon implements Geometry {
 
       return intersections;
    }
+
+
+
 }

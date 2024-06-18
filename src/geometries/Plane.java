@@ -10,7 +10,7 @@ import java.util.List;
  * Plane class represents a plane in 3D Cartesian coordinate
  * system
  */
-public class Plane implements Geometry{
+public class Plane extends Geometry{
     /**Point on the plane*/
     final private Point q;
     /**Normal to the plane*/
@@ -51,7 +51,7 @@ public class Plane implements Geometry{
 
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         Vector p0Q;
         if (ray.getHead().equals(q)) {
             return null;
@@ -65,7 +65,7 @@ public class Plane implements Geometry{
         if (Util.alignZero(t) <= 0) {
             return null;
         }
-        return List.of(ray.getPoint(t));
+        return List.of(new GeoPoint(this, ray.getPoint(t)));
 
     }
 }
