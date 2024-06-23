@@ -325,7 +325,7 @@ public class Camera implements Cloneable {
      */
     private void castRays(int nX, int nY, int column, int row) {
         Ray ray = constructRay(nX, nY, column, row);
-        Color color = rayTracer.TraceRay(ray);
+        Color color = rayTracer.traceRay(ray);
         imageWriter.writePixel(column, row, color);
     }
 

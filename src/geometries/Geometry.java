@@ -1,14 +1,17 @@
 package geometries;
-import primitives.Point;
-import primitives.Vector;
-import primitives.Util;
-import primitives.Color;
+import primitives.*;
 
 /**
  * Geometry interface is the basic interface for all geometric objects
  */
 
 public abstract class Geometry extends Intersectable {
+
+    /**
+     * @param point
+     * @return the color of the geometry at the point
+     */
+    private Material material = new Material();
 
     /**
      * @param point
@@ -28,6 +31,22 @@ public abstract class Geometry extends Intersectable {
      */
     public Color getEmission() {
         return emission;
+    }
+
+    /**
+     * @return the material of the geometry
+     */
+    public Material getMaterial() {
+        return material;
+    }
+
+    /**
+     * @param material
+     * @return
+     */
+    public Geometry setMaterial(Material material) {
+        this.material = material;
+        return this;
     }
 
     /**

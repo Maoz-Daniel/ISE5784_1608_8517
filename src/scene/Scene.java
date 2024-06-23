@@ -5,6 +5,10 @@ import geometries.Geometries;
 import lighting.AmbientLight;
 import primitives.Color;
 
+import java.util.LinkedList;
+import java.util.List;
+import lighting.LightSource;
+
 /**
  * Scene class represents a scene in 3D Cartesian coordinate
  */
@@ -21,6 +25,9 @@ public class Scene {
 
     /** The geometries of the scene */
     public Geometries geometries = new Geometries();
+
+    /** The lights of the scene */
+    public List<LightSource> lights = new LinkedList<>();
 
     /**
      * Constructor based on a name
@@ -54,6 +61,16 @@ public class Scene {
      */
     public Scene setGeometries(Geometries geometries) {
         this.geometries = geometries;
+        return this;
+    }
+
+    /**
+     * Getter for the name
+     * @param lights
+     * @return
+     */
+    public Scene setLights(List<LightSource> lights) {
+        this.lights = lights;
         return this;
     }
 
