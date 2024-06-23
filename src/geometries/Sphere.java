@@ -59,9 +59,9 @@ public class Sphere extends RadialGeometry{
             Point p1 = ray.getPoint(t1); // P1 = P0 + t1 * V
             Point p2 = ray.getPoint(t2); // P2 = P0 + t2 * V
             if(p1.subtract(head).length() > p2.subtract(head).length()){
-                return List.of(new GeoPoint(this, p2), new GeoPoint(this, p1));
+                return List.of( new GeoPoint(this, p1), new GeoPoint(this, p2));
             }
-            return List.of(new GeoPoint(this, p2), new GeoPoint(this, p1));
+            return List.of( new GeoPoint(this, p1),new GeoPoint(this, p2));
         }
         if (t1 > 0) { // if the sphere is behind the ray
             Point p1 = ray.getPoint(t1); // P1 = P0 + t1 * V
@@ -75,9 +75,9 @@ public class Sphere extends RadialGeometry{
 
 
     }
-
-    @Override
-    public List<Point> findIntersections(Ray ray) {
-        return List.of();
-    }
+//
+//    @Override
+//    public List<Point> findIntersections(Ray ray) {
+//        return List.of();
+//    }
 }

@@ -15,17 +15,20 @@ public abstract class  Intersectable {
      * @param ray - the ray that intersects the geometry
      * @return a list of intersection points
      */
-   public List<Point> findIntersections(Ray ray){}
+    public List<Point> findIntersections(Ray ray) {
+        var geoList = findGeoIntersections(ray);
+        return geoList == null ? null : geoList.stream().map(gp -> gp.point).toList();
+    }
 
-   /*
+   /**
     * Class GeoPoint is a helper class that represents a point on a geometry.
     */
    public static class GeoPoint {
 
-       /* The geometry that the point is on */
+       /** The geometry that the point is on */
        public Geometry geometry;
 
-       /* The point on the geometry */
+       /** The point on the geometry */
        public Point point;
 
        /**
