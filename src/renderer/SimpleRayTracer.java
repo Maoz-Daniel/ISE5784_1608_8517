@@ -17,6 +17,7 @@ import primitives.Double3;
  */
 public class SimpleRayTracer extends RayTracerBase{
 
+    private final double DELTA = 0.000001;
 
     /** The scene of the ray tracer */
         public SimpleRayTracer(Scene scene) {
@@ -32,40 +33,66 @@ public class SimpleRayTracer extends RayTracerBase{
             return calcColor(closestPoint, ray);
         }
 
-        private Color calcColor(GeoPoint p, Ray ray) {
+    private Color calcColor(GeoPoint p, Ray ray) {
         return scene.ambientLight.getIntensity().add(calcLocalEffects(p, ray));
-        }
-
-//    private Color calcLocalEffects(GeoPoint gp, Ray ray) {
-//        Vector n = gp.geometry.getNormal(gp.point);
-//        Vector v = ray.getDirection();
-//        double nv = alignZero(n.dotProduct(v));
-//        if (nv == 0) return gp.geometry.getEmission();
-//
-//        Material material = gp.geometry.getMaterial();
-//        Color color = gp.geometry.getEmission();
-//        for (LightSource lightSource : scene.lights) {
-//            Vector l = lightSource.getL(gp.point);
-//            double nl = alignZero(n.dotProduct(l));
-//            if (nl * nv > 0) { // sign(nl) == sign(nv)
-//                Color iL = lightSource.getIntensity(gp.point);
-//                color = color.add(
-//                        iL.scale(calcDiffusive(material, n, l, nl))
-//                                .add(calcSpecular(material, n, l, nl, v))
-//                );
-//            }
-//        }
-//         return color;
-//    }
-
-    private Double3 calcDiffusive(Material mat, double nl) {
-        return mat.KD.scale(nl < 0 ? -nl : nl);
     }
 
-//    private Double3 calcSpecular(Material mat, Vector n, Vector l, double nl, Vector v) {
-//        double vr = v.dotProduct(l.mirror(n, nl));
-//        return (alignZero(vr) > 0) ? Double3.ZERO : mat.KS.scale(Math.pow(-vr, mat.nShininess));
-//    }
+    /**
+     * Calculate the local effects of the point
+     *
+     * @param point
+     * @return the color of the point
+     */
+    private Color calcLocalEffects(GeoPoint point, Ray ray) {
+        Color color = point.geometry.getEmission();
+        Vector n = point.geometry.getNormal(point.point);
+        Vector v = ray.getDirection();
+        double nv = alignZero(n.dotProduct(v));
+        if (nv == 0) return color;
+        Material material = point.geometry.getMaterial();
+
+        for (LightSource lightSource : scene.lights) {
+            Vector l = lightSource.getL(point.point);
+            double nl = alignZero(n.dotProduct(l));
+            if (nl * nv > 0) { // sign(nl) == sign(nv)
+                Color iL = lightSource.getIntensity(point.point);
+                color = color.add(iL.scale(calcDiffusive(material, nl)),
+                        iL.scale(calcSpecular(material, n, l, nl, v)));
+            }
+        }
+        return color;
+
+    }
+
+    /**
+     * Calculate the specular light
+     * @param material
+     * @param n
+     * @param l
+     * @param nl
+     * @param v
+     * @return the color of the point
+     */
+    private Double3 calcSpecular(Material material, Vector n, Vector l, double nl, Vector v) {
+        Vector r = l.subtract(n.scale(2 * nl));
+        double minusVR = -alignZero(v.dotProduct(r));
+        return material.KS.scale(Math.pow(Math.max(0, minusVR), material.nShininess));
+    }
+
+
+    /**
+     * Calculate the diffusive light
+     *
+     * @param material
+     * @param nl
+     * @return the color of the point
+     */
+    private Double3 calcDiffusive(Material material, double nl) {
+        return material.KD.scale(Math.abs(nl));
+
+
+    }
+
 
 
 }
