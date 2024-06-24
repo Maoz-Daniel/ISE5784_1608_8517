@@ -194,4 +194,34 @@ public class LightsTests {
                 .writeToImage();
     }
 
+
+    @Test
+    public void sphereMultipleLights() {
+        scene1.geometries.add(sphere);
+        scene1.lights.add(new PointLight(new Color(500, 300, 0), new Point(-40, -40, 20))
+                .setKl(0.002).setKq(0.0004));
+        scene1.lights.add(new DirectionalLight(new Color(300, 150, 150), new Vector(1, -1, -0.5)));
+        scene1.lights.add(new SpotLight(new Color(300, 150, 150), new Point(-60, -60, 30), new Vector(1, 1, -0.5))
+                .setKl(0.002).setKq(0.0002));
+
+        camera1.setImageWriter(new ImageWriter("lightSphereMultiple", 500, 500))
+                .build()
+                .renderImage()
+                .writeToImage();
+    }
+
+    @Test
+    public void trianglesMultipleLights() {
+        scene2.geometries.add(triangle1, triangle2);
+        scene2.lights.add(new PointLight(new Color(500, 300, 0), new Point(20, 0, -80))
+                .setKl(0.002).setKq(0.0004));
+        scene2.lights.add(new DirectionalLight(new Color(300, 150, 150), new Vector(-1, -1, -1)));
+        scene2.lights.add(new SpotLight(new Color(300, 150, 150), new Point(40, 20, -120), new Vector(-2, -2, -2))
+                .setKl(0.002).setKq(0.0002));
+
+        camera2.setImageWriter(new ImageWriter("lightTrianglesMultiple", 500, 500))
+                .build()
+                .renderImage()
+                .writeToImage();
+    }
 }
