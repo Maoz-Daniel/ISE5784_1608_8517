@@ -224,4 +224,24 @@ public class LightsTests {
                 .renderImage()
                 .writeToImage();
     }
+
+    @Test
+    public void funTests() {
+        scene2.geometries.add(triangle1.setEmission(new Color(100,0,200)).setMaterial(new Material().setKD(KD).setKS(KS).setNShininess(SHININESS)),
+                triangle2.setEmission(new Color(0,50,50)).setEmission(new Color(100,0,100)).setMaterial(new Material().setKD(KD).setKS(KS).setNShininess(SHININESS))
+                ,new Sphere(new Point(0, 0, -150), 50).setEmission(new Color(225,225,225)).setMaterial(new Material().setKD(KD).setKS(KS).setNShininess(SHININESS)),
+                new Sphere(new Point(0, 0, -100), 20).setEmission(new Color(0,0,0)).setMaterial(new Material().setKD(KD).setKS(KS).setNShininess(SHININESS)),
+                new Sphere(new Point(0, 0, -130), 40).setEmission(new Color(0,50,100)).setMaterial(new Material().setKD(KD).setKS(KS).setNShininess(SHININESS)));
+
+        scene2.lights.add(new PointLight(new Color(500, 0, 0), new Point(20, 0, -80))
+                .setKl(0.002).setKq(0.0004));
+        scene2.lights.add(new DirectionalLight(new Color(0, 150, 150), new Vector(-1, -1, -1)));
+        scene2.lights.add(new SpotLight(new Color(300, 0, 150), new Point(40, 20, -120), new Vector(-2, -2, -2))
+                .setKl(0.002).setKq(0.0002));
+
+        camera2.setImageWriter(new ImageWriter("funTest", 500, 500))
+                .build()
+                .renderImage()
+                .writeToImage();
+    }
 }
