@@ -244,4 +244,58 @@ public class LightsTests {
                 .renderImage()
                 .writeToImage();
     }
+
+    @Test
+    public void funTests2() {
+        Scene sceneMine = new Scene("Test scene for fun")
+                .setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15)));
+
+        // Add geometries to the scene
+        sceneMine.geometries.add(
+                new Sphere(new Point(0, 0, -170), 150)
+                        .setEmission(new Color(100, 100, 100))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(0, 0, 55), 100)
+                        .setEmission(new Color(100, 100, 100))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(0, 0, 215), 65)
+                        .setEmission(new Color(100, 100, 100))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(-55, 25, 220), 10)
+                 .setEmission(new Color(0, 0, 0))
+                 .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(-55, -25, 220), 10)
+                        .setEmission(new Color(0, 0, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(-60, 0, 200), 10)
+                        .setEmission(new Color(255, 140, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100))
+
+        );
+
+        // Add lights to the scene
+        sceneMine.lights.add(
+                new PointLight(new Color(500, 0, 0), new Point(20, 0, -80))
+                        .setKl(0.002).setKq(0.0004));
+        sceneMine.lights.add(
+                new DirectionalLight(new Color(400, 400, 400), new Vector(1, -1, -1)));
+        sceneMine.lights.add(
+                new SpotLight(new Color(300, 0, 150), new Point(40, 20, -120), new Vector(-2, -2, -2))
+                        .setKl(0.002).setKq(0.0002));
+
+        // Adjust camera position and direction
+        Camera.Builder cameraMine = Camera.getBuilder()
+                .setRayTracer(new SimpleRayTracer(sceneMine))
+                .setLocation(new Point(-1000, 0, 0))
+                .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
+                .setVpSize(500, 500).setVpDistance(600); // Adjusted vpSize and vpDistance
+
+        cameraMine.setImageWriter(new ImageWriter("funTestMine", 1000, 1000))
+                .build()
+                .renderImage()
+                .writeToImage();
+    }
+
+
+
 }
