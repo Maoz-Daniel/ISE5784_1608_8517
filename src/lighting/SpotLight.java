@@ -4,8 +4,15 @@ import primitives.Color;
 import primitives.Vector;
 import primitives.Point;
 
+/**
+ * Class SpotLight is the basic class representing a spot light in a 3D system.
+ * param intensity - the light intensity
+ * param position - the position of the light
+ * param direction - the direction of the light
+ */
 public class SpotLight extends PointLight {
 
+    /** The direction of the light source */
     public Vector direction;
 
     /**

@@ -17,6 +17,7 @@ import primitives.Double3;
  */
 public class SimpleRayTracer extends RayTracerBase{
 
+    /** The delta for the calculations */
     private final double DELTA = 0.000001;
 
     /** The scene of the ray tracer */
@@ -33,6 +34,12 @@ public class SimpleRayTracer extends RayTracerBase{
             return calcColor(closestPoint, ray);
         }
 
+        /**
+         * Calculate the color of the point
+         * @param p
+         * @param ray
+         * @return the color of the point
+         */
     private Color calcColor(GeoPoint p, Ray ray) {
         return scene.ambientLight.getIntensity().add(calcLocalEffects(p, ray));
     }
@@ -82,15 +89,12 @@ public class SimpleRayTracer extends RayTracerBase{
 
     /**
      * Calculate the diffusive light
-     *
      * @param material
      * @param nl
      * @return the color of the point
      */
     private Double3 calcDiffusive(Material material, double nl) {
         return material.KD.scale(Math.abs(nl));
-
-
     }
 
 

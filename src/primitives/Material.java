@@ -5,8 +5,9 @@ package primitives;
  */
 public class Material {
 
-    /** Default KD and KS */
+    /** Default KD diffuse coefficient */
     public Double3 KD=Double3.ZERO;
+    /** Default KS specular coefficient */
     public Double3 KS= Double3.ZERO;
 
     /** Default nShininess */

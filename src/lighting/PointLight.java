@@ -3,11 +3,20 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
 
+/**
+ * Class PointLight is the basic class representing a point light in a 3D system.
+ * param intensity - the light intensity
+ * param position - the position of the light
+ */
 public class PointLight extends Light implements LightSource {
 
+    /** The position of the light source */
     protected Point position;
+    /** The attenuation factors kc */
     private double kC = 1;
+    /** The attenuation factors kl*/
     private double kL = 0;
+    /** The attenuation factors kq */
     private double kQ = 0;
 
     /**

@@ -72,6 +72,11 @@ public class Ray {
     }
 
 
+    /**
+     * Find the closest GeoPoint to the head of the ray
+     * @param points
+     * @return
+     */
     public GeoPoint findClosestGeoPoint(List<GeoPoint> points) {
         if(points == null || points.isEmpty())
             return null;
