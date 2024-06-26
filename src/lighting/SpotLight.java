@@ -60,6 +60,7 @@ public class SpotLight extends PointLight {
      */
     public PointLight setNarrowBeam(double narrowBeam) {
         this.narrowBeam = narrowBeam;
+
         return this;
     }
 
@@ -73,6 +74,7 @@ public class SpotLight extends PointLight {
            return super.getIntensity(p).scale(Math.max(0, cos));
         else
             return super.getIntensity(p).scale(Math.pow(Math.max(0, cos),narrowBeam));
+
 
 
 
