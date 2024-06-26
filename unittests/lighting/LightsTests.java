@@ -173,7 +173,7 @@ public class LightsTests {
         scene1.geometries.add(sphere);
         scene1.lights
                 .add(new SpotLight(sphereLightColor, sphereLightPosition, new Vector(1, 1, -0.5))
-                        .setKl(0.001).setKq(0.00004));//.setNarrowBeam(10));
+                        .setKl(0.001).setKq(0.00004).setNarrowBeam(10));
 
         camera1.setImageWriter(new ImageWriter("lightSphereSpotSharp", 500, 500))
                 .build()
@@ -186,7 +186,7 @@ public class LightsTests {
     public void trianglesSpotSharp() {
         scene2.geometries.add(triangle1, triangle2);
         scene2.lights.add(new SpotLight(trianglesLightColor, trianglesLightPosition, trianglesLightDirection)
-                .setKl(0.001).setKq(0.00004));//.setNarrowBeam(10));
+                .setKl(0.001).setKq(0.00004).setNarrowBeam(10));
 
         camera2.setImageWriter(new ImageWriter("lightTrianglesSpotSharp", 500, 500))
                 .build()
@@ -195,6 +195,8 @@ public class LightsTests {
     }
 
 
+
+    /** Produce a picture of a sphere lighted by a point light and a directional light */
     @Test
     public void sphereMultipleLights() {
         scene1.geometries.add(sphere);
@@ -210,6 +212,7 @@ public class LightsTests {
                 .writeToImage();
     }
 
+    /** Produce a picture of two triangles lighted by a point light and a directional light */
     @Test
     public void trianglesMultipleLights() {
         scene2.geometries.add(triangle1, triangle2);
@@ -225,6 +228,7 @@ public class LightsTests {
                 .writeToImage();
     }
 
+    /** Produce a picture of an eye*/
     @Test
     public void funTests() {
         scene2.geometries.add(triangle1.setEmission(new Color(100,0,200)).setMaterial(new Material().setKD(KD).setKS(KS).setNShininess(SHININESS)),
@@ -244,4 +248,68 @@ public class LightsTests {
                 .renderImage()
                 .writeToImage();
     }
+
+    /** Produce a picture of a snow man*/
+    @Test
+    public void funTests2() {
+        Scene sceneMine = new Scene("Test scene for fun")
+                .setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15)));
+
+        // Add geometries to the scene
+        sceneMine.geometries.add(
+                new Sphere(new Point(0, 0, -170), 150)
+                        .setEmission(new Color(100, 100, 100))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(0, 0, 55), 100)
+                        .setEmission(new Color(100, 100, 100))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(0, 0, 215), 65)
+                        .setEmission(new Color(100, 100, 100))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(-55, 25, 220), 10)
+                        .setEmission(new Color(0, 0, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(-55, -25, 220), 10)
+                        .setEmission(new Color(0, 0, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(-60, 0, 200), 10)
+                        .setEmission(new Color(255, 140, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Plane(new Point(0, 0, -400), new Vector(0, 0, 1))
+                        .setEmission(new Color(220, 30, 70))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Plane(new Point(1500, 0, 0), new Vector(1, 0, 0))
+                        .setEmission(new Color(50, 50, 100))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100))
+
+        );
+
+        // Add lights to the scene
+        sceneMine.lights.add(
+                new PointLight(new Color(225, 225, 225), new Point(20, 0, -80))
+                        .setKl(0.002).setKq(0.0004));
+        sceneMine.lights.add(
+                new DirectionalLight(new Color(400, 400, 400), new Vector(1, -1, -1)));
+        sceneMine.lights.add(
+                new SpotLight(new Color(300, 0, 150), new Point(40, 20, -120), new Vector(-2, -2, -2))
+                        .setKl(0.002).setKq(0.0002));
+        sceneMine.lights.add(
+                new PointLight(new Color(300, 300, 300), new Point(1450, -500, 750))
+        );
+
+        // Adjust camera position and direction
+        Camera.Builder cameraMine = Camera.getBuilder()
+                .setRayTracer(new SimpleRayTracer(sceneMine))
+                .setLocation(new Point(-1000, 0, 0))
+                .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
+                .setVpSize(500, 500).setVpDistance(600); // Adjusted vpSize and vpDistance
+
+        cameraMine.setImageWriter(new ImageWriter("funTestMine", 1000, 1000))
+                .build()
+                .renderImage()
+                .writeToImage();
+    }
+
+
+
 }
