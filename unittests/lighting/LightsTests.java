@@ -276,25 +276,19 @@ public class LightsTests {
                         .setEmission(new Color(255, 140, 0))
                         .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
                 new Plane(new Point(0, 0, -400), new Vector(0, 0, 1))
-                        .setEmission(new Color(220, 30, 70))
+                        .setEmission(new Color(225, 50, 50))
                         .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
                 new Plane(new Point(1500, 0, 0), new Vector(1, 0, 0))
-                        .setEmission(new Color(50, 50, 100))
+                        .setEmission(new Color(50, 225, 100))
                         .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100))
 
         );
 
-        // Add lights to the scene
+
         sceneMine.lights.add(
-                new PointLight(new Color(225, 225, 225), new Point(20, 0, -80))
-                        .setKl(0.002).setKq(0.0004));
+                new DirectionalLight(new Color(225, 225, 225), new Vector(1, -1, -1)));
         sceneMine.lights.add(
-                new DirectionalLight(new Color(400, 400, 400), new Vector(1, -1, -1)));
-        sceneMine.lights.add(
-                new SpotLight(new Color(300, 0, 150), new Point(40, 20, -120), new Vector(-2, -2, -2))
-                        .setKl(0.002).setKq(0.0002));
-        sceneMine.lights.add(
-                new PointLight(new Color(300, 300, 300), new Point(1450, -500, 750))
+                new PointLight(new Color(225, 100, 100), new Point(1450, -500, 750))
         );
 
         // Adjust camera position and direction

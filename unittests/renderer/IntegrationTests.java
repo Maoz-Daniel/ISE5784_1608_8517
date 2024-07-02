@@ -1,13 +1,10 @@
 package renderer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import geometries.Geometry;
+import geometries.*;
 import org.junit.jupiter.api.Test;
 import primitives.*;
 import java.util.List;
-import geometries.Sphere;
-import geometries.Plane;
-import geometries.Triangle;
 
 import scene.Scene;
 
@@ -138,4 +135,7 @@ public class IntegrationTests {
         assertEquals(2, counterPixel(triangle, camera), "ERROR: wrong number of intersections");
 
     }
+
+
+
 }
