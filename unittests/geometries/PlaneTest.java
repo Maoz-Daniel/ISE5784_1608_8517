@@ -87,7 +87,7 @@ class PlaneTest {
         assertEquals(List.of(p001), result, "Ray's line intersects the plane");
 
         // Ray's line starts outside the plane and isn't parallel to the plane and isn't orthogonal
-        // to the plane and doesn't intersects the plane (0 point)
+        // to the plane and doesn't intersect the plane (0 point)
         result = plane.findIntersections(new Ray(new Point(0, 1, 2), v0m11));
         assertNull(result, "Ray's line out of plane");
 

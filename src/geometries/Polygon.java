@@ -85,7 +85,8 @@ public class Polygon extends Geometry {
    public Vector getNormal(Point point) { return plane.getNormal(); }
 
    @Override
-   protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+   protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+
       var intersections = plane.findIntersections(ray); // Get the intersection point with the plane
       if (intersections == null) {
          return null;
@@ -121,8 +122,10 @@ public class Polygon extends Geometry {
          }
       }
 
+
       List<GeoPoint> geoPoints = new LinkedList<GeoPoint>();
         for (Point point : intersections) {
+
              geoPoints.add(new GeoPoint(this, point));
         }
         return geoPoints;
