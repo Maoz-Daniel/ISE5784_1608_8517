@@ -33,10 +33,10 @@ public class Sphere extends RadialGeometry{
         Point head = ray.getHead();
         if(ray.getHead().equals(center)){// if the ray starts at the center of the sphere
             Point p = ray.getPoint(radius);
-            if(Util.alignZero(ray.getHead().distance(p)-maxDistance) >= 0){ // if the distance between the head of the ray and the point is bigger than the max distance
-                return null;
+            if(Util.alignZero(ray.getHead().distance(p)-maxDistance) <= 0){ // if the distance between the head of the ray and the point is bigger than the max distance
+                return List.of(new GeoPoint(this,p ));
             }
-            return List.of(new GeoPoint(this,p ));
+
         }
 
         Vector u = center.subtract(head); // u = O - P0
@@ -66,14 +66,14 @@ public class Sphere extends RadialGeometry{
             Point p1 = ray.getPoint(t1); // P1 = P0 + t1 * V
             Point p2 = ray.getPoint(t2); // P2 = P0 + t2 * V
             if(p1.subtract(head).length() > p2.subtract(head).length()){
-                if(Util.alignZero(ray.getHead().distance(p1)-maxDistance) >= 0){ // if the distance between the head of the ray and the point is bigger than the max distance
-                   if(Util.alignZero(ray.getHead().distance(p2)-maxDistance) >= 0){ // if the distance between the head of the ray and the point is bigger than the max distance
+                if(Util.alignZero(t1-maxDistance) >= 0){ // if the distance between the head of the ray and the point is bigger than the max distance
+                   if(Util.alignZero(t2-maxDistance) >= 0){ // if the distance between the head of the ray and the point is bigger than the max distance
                        return null;
                    }
                     return List.of(new GeoPoint(this, p2));
                 }
 
-                if(Util.alignZero(ray.getHead().distance(p2)-maxDistance) >= 0){ // if the distance between the head of the ray and the point is bigger than the max distance
+                if(Util.alignZero(t2-maxDistance) >= 0){ // if the distance between the head of the ray and the point is bigger than the max distance
                     return List.of(new GeoPoint(this, p1));
                 }
 
@@ -82,14 +82,14 @@ public class Sphere extends RadialGeometry{
         }
         if (t1 > 0) { // if the sphere is behind the ray
             Point p1 = ray.getPoint(t1); // P1 = P0 + t1 * V
-            if(Util.alignZero(ray.getHead().distance(p1)-maxDistance) >= 0){ // if the distance between the head of the ray and the point is bigger than the max distance
+            if(Util.alignZero(t1-maxDistance) >= 0){ // if the distance between the head of the ray and the point is bigger than the max distance
                 return null;
             }
             return List.of( new GeoPoint(this, p1));
         }
         if (t2 > 0) { // if the sphere is behind the ray
             Point p2 = ray.getPoint(t2); // P2 = P0 + t2 * V
-            if(Util.alignZero(ray.getHead().distance(p2)-maxDistance)>= 0){ // if the distance between the head of the ray and the point is bigger than the max distance
+            if(Util.alignZero(t2-maxDistance)>= 0){ // if the distance between the head of the ray and the point is bigger than the max distance
                 return null;
             }
             return List.of(new GeoPoint(this, p2));
