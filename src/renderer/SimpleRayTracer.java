@@ -66,7 +66,7 @@ public class SimpleRayTracer extends RayTracerBase {
         for (LightSource lightSource : scene.lights) {
             Vector l = lightSource.getL(point.point);
             double nl = alignZero(n.dotProduct(l));
-            if ((nl * nv > 0) && unshaded(point,lightSource,l,n)) { // sign(nl) == sign(nv)
+            if ((nl * nv > 0) && unshaded(point,lightSource,l,n,nl)) { // sign(nl) == sign(nv)
                 Color iL = lightSource.getIntensity(point.point);
                 color = color.add(iL.scale(calcDiffusive(material, nl)),
                         iL.scale(calcSpecular(material, n, l, nl, v)));
@@ -112,15 +112,24 @@ public class SimpleRayTracer extends RayTracerBase {
      * @param gp
      * @return true if the point is shaded, false otherwise
      */
-    private boolean unshaded(GeoPoint gp,LightSource light, Vector l, Vector n) {
+    private boolean unshaded(GeoPoint gp,LightSource light, Vector l, Vector n, double nl){
         Vector lightDirection = l.scale(-1); // from point to light source
-        Vector epsVector = n.scale(DELTA);
+        Vector epsVector = n.scale(nl < 0 ? DELTA : -DELTA);
         Point point = gp.point.add(epsVector);
         Ray ray= new Ray(point, lightDirection);
 
-        var intersections = scene.geometries.findGeoIntersections(ray, light.getDistance(gp.point));
+        var intersections = scene.geometries.findGeoIntersections(ray);
 
-        return intersections!= null;
+       if( intersections!= null)
+         {
+              double lightDistance = light.getDistance(gp.point);
+              for (GeoPoint geoPoint : intersections) {
+                if (alignZero(geoPoint.point.distance(gp.point) - lightDistance) <= 0)
+                     return false;
+              }
+         }
+          return true;
+
 
     }
 
