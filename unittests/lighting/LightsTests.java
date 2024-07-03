@@ -275,11 +275,14 @@ public class LightsTests {
                 new Sphere(new Point(-60, 0, 200), 10)
                         .setEmission(new Color(255, 140, 0))
                         .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
-                new Plane(new Point(0, 0, -400), new Vector(0, 0, 1))
+                new Plane(new Point(0, 0, -320), new Vector(0, 0, 1))
                         .setEmission(new Color(225, 50, 50))
                         .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
-                new Plane(new Point(1500, 0, 0), new Vector(1, 0, 0))
+                new Plane(new Point(2000, 0, 0), new Vector(1, 0, 0))
                         .setEmission(new Color(50, 225, 100))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(2000, -500, 850), 150)
+                        .setEmission(new Color(225, 225, 0))
                         .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100))
 
         );
@@ -288,7 +291,7 @@ public class LightsTests {
         sceneMine.lights.add(
                 new DirectionalLight(new Color(225, 225, 225), new Vector(1, -1, -1)));
         sceneMine.lights.add(
-                new PointLight(new Color(225, 100, 100), new Point(1450, -500, 750))
+                new PointLight(new Color(225, 100, 100), new Point(1800, -500, 850))
         );
 
         // Adjust camera position and direction
@@ -303,6 +306,8 @@ public class LightsTests {
                 .renderImage()
                 .writeToImage();
     }
+
+
 
 
 
