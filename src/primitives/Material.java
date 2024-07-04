@@ -13,6 +13,11 @@ public class Material {
     /** Default nShininess */
     public int nShininess=0;
 
+    /** Default KT transparency coefficient */
+    public Double3 KT=Double3.ZERO;
+
+    /** Default KR reflection coefficient */
+    public Double3 KR=Double3.ZERO;
     /**
      * Constructor based on a color and a double3
      * @param KD
@@ -65,6 +70,49 @@ public class Material {
         this.nShininess = nShininess;
         return this;
     }
+
+    /**
+     * Setter for the material's transparency coefficient
+     * @param KT
+     * @return
+     */
+    public Material setKT(Double3 KT) {
+        this.KT = KT;
+        return this;
+    }
+
+    /**
+     * Setter for the material's reflection coefficient
+     * @param KR
+     * @return
+     */
+    public Material setKR(Double3 KR) {
+        this.KR = KR;
+        return this;
+    }
+
+/**
+     * Setter for the material's reflection coefficient
+     * @param KR
+     * @return
+     */
+    public Material setKR(double KR) {
+        this.KR = new Double3(KR);
+        return this;
+    }
+
+    /**
+     * Setter for the material's transparency coefficient
+     * @param KT
+     * @return
+     */
+    public Material setKT(double KT) {
+        this.KT = new Double3(KT);
+        return this;
+    }
+
+
+
 
 
 }
