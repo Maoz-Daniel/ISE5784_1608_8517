@@ -283,7 +283,7 @@ public class LightsTests {
                         .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
                 new Sphere(new Point(2000, -500, 850), 150)
                         .setEmission(new Color(225, 225, 0))
-                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKT(0.3))
 
         );
 

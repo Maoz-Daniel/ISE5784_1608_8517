@@ -27,7 +27,7 @@ public class Ray {
     /** Constructor based on a point and a vector and a normal */
     public Ray(Point p, Vector v, Vector normal) {
         double res = v.dotProduct(normal);
-        head = Util.isZero(res) ? head : res > 0 ? head.add(normal.scale(DELTA)) : head.add(normal.scale(-DELTA));
+        head = Util.isZero(res) ? p : res > 0 ? p.add(normal.scale(DELTA)) : p.add(normal.scale(-DELTA));
         this.direction= v.normalize();
     }
 
