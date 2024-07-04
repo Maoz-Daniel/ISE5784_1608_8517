@@ -5,7 +5,6 @@ import static java.awt.Color.*;
 import org.junit.jupiter.api.Test;
 
 import geometries.*;
-import lighting.*;
 import primitives.*;
 import renderer.*;
 import scene.Scene;
@@ -243,10 +242,81 @@ public class LightsTests {
         scene2.lights.add(new SpotLight(new Color(300, 0, 150), new Point(40, 20, -120), new Vector(-2, -2, -2))
                 .setKl(0.002).setKq(0.0002));
 
-        camera2.setImageWriter(new ImageWriter("funTest", 500, 500))
+        camera2.setImageWriter(new ImageWriter("MyFunTest", 500, 500))
                 .build()
                 .renderImage()
                 .writeToImage();
+    }
+
+    /** many shapes picture*/
+    @Test
+    public void manyShapesPicture() {
+        Scene sceneMine = new Scene("Many geometries scene ")
+                .setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15)));
+
+        // Add geometries to the scene
+        int numSpheres = 100;
+        double radius = 100; // Adjust the radius of the circle as needed
+        double angleIncrement = 2 * Math.PI / numSpheres;
+
+        for (int i = 0; i < numSpheres; i++) {
+            double angle = i * angleIncrement;
+            double x = radius * Math.cos(angle);
+            double y = radius * Math.sin(angle);
+            double z = 0; // All spheres in the same plane, z = 0
+
+            sceneMine.geometries.add(new Sphere(new Point(x, y, z), 10).setEmission(randColor())
+                    .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)));
+        }
+
+        sceneMine.geometries.add(new Polygon(new Point(-300, -300, -130), new Point(-300, 300, -130),
+                new Point(300, 300, -130), new Point(300, -300, -130))
+                .setEmission(new Color(0, 0, 0))
+                .setMaterial(new Material().setKR(0.6).setNShininess(100)).setEmission(randColor().scale(0.1)),
+                new Polygon(new Point(300, -300, -130), new Point(300, 300, -130),
+                        new Point(300, 300, 300), new Point(300, -300, 300))
+                        .setEmission(new Color(0, 0, 0))
+                        .setMaterial(new Material().setKR(0.6).setNShininess(100)).setEmission(randColor().scale(0.1)));
+
+        sceneMine.lights.add(
+                new DirectionalLight(new Color(225, 225, 225), new Vector(1, -1, -1)));
+
+
+
+        // Adjust camera position and direction
+        Camera.Builder cameraMine = Camera.getBuilder()
+                .setRayTracer(new SimpleRayTracer(sceneMine))
+                .setLocation(new Point(-600, 0, 300))
+                .setDirection(new Vector(2, 0, -1), new Vector(1, 0, 2)) // Look towards the positive z-axis
+                .setVpSize(500, 500).setVpDistance(500); // Adjusted vpSize and vpDistance
+
+        cameraMine.setImageWriter(new ImageWriter("ManyShapesTest", 1000, 1000))
+                .build()
+                .renderImage()
+                .writeToImage();
+    }
+    private Color randColor(){
+        //random number between 0-7
+        int rand = (int)(Math.random()*8);
+        switch (rand){
+            case 0:
+                return new Color(255,0,0);//red
+            case 1:
+                return new Color(0,255,0);//green
+            case 2:
+                return new Color(0,0,255);//blue
+            case 3:
+                return new Color(255,255,0);//yellow
+            case 4:
+                return new Color(255,0,255);//purple
+            case 5:
+                return new Color(0,255,255);//cyan
+            case 6:
+                return new Color(255,150,150);//pink
+            case 7:
+                return new Color(225,120,0);//orange
+        }
+        return new Color(0,0,0);
     }
 
     /** Produce a picture of a snow man*/
@@ -278,21 +348,23 @@ public class LightsTests {
                 new Plane(new Point(0, 0, -320), new Vector(0, 0, 1))
                         .setEmission(new Color(225, 50, 50))
                         .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
-                new Plane(new Point(2000, 0, 0), new Vector(1, 0, 0))
+                new Plane(new Point(3500, 0, 0), new Vector(1, 0, 0))
                         .setEmission(new Color(50, 225, 100))
                         .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
-                new Sphere(new Point(2000, -500, 850), 150)
+                new Sphere(new Point(2000, -700, 900), 150)
                         .setEmission(new Color(225, 225, 0))
-                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKT(0.3))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKT(0.3)),
+                new Polygon(new Point(1500, 100, -320), new Point(1400, -500, -320),
+                        new Point(1400, -500, 400), new Point(1500, 100, 400))
+                        .setEmission(new Color(0, 0, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKR(1)
 
-        );
+                        ));
 
 
         sceneMine.lights.add(
                 new DirectionalLight(new Color(225, 225, 225), new Vector(1, -1, -1)));
-        sceneMine.lights.add(
-                new PointLight(new Color(225, 100, 100), new Point(1800, -500, 850))
-        );
+
 
         // Adjust camera position and direction
         Camera.Builder cameraMine = Camera.getBuilder()
@@ -301,12 +373,46 @@ public class LightsTests {
                 .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
                 .setVpSize(500, 500).setVpDistance(600); // Adjusted vpSize and vpDistance
 
-        cameraMine.setImageWriter(new ImageWriter("funTestMine", 1000, 1000))
+        cameraMine.setImageWriter(new ImageWriter("MyFunTestMine", 1000, 1000))
                 .build()
                 .renderImage()
                 .writeToImage();
     }
 
+
+    /** many shapes picture*/
+    @Test
+    public void multipleMirrors() {
+        Scene sceneMine = new Scene("multiple Mirrors scene ")
+                .setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15)));
+
+
+
+        sceneMine.geometries.add(new Sphere(new Point(151,0,0),25 ).setEmission(randColor()).setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Plane(new Point(300, 0, 0), new Vector(1, 0, 0))
+                        .setEmission(new Color(0, 0, 0))
+                        .setMaterial(new Material().setKR(0.8).setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Plane(new Point(-1, 0, 0), new Vector(-1, 0, 0)).setEmission(new Color(0, 0, 0))
+                .setMaterial(new Material().setKR(0.8).setKS(KS3).setKD(KD3).setNShininess(100))
+                );
+
+
+        sceneMine.lights.add(new DirectionalLight(new Color(225, 225, 225), new Vector(0, -1, -1)));
+
+
+
+        // Adjust camera position and direction
+        Camera.Builder cameraMine = Camera.getBuilder()
+                .setRayTracer(new SimpleRayTracer(sceneMine))
+                .setLocation(new Point(0, 0, 50))
+                .setDirection(new Vector(4, 0, -1), new Vector(1, 0, 4)) // Look towards the positive z-axis
+                .setVpSize(500, 500).setVpDistance(500); // Adjusted vpSize and vpDistance
+
+        cameraMine.setImageWriter(new ImageWriter("MultipleMirrors", 1000, 1000))
+                .build()
+                .renderImage()
+                .writeToImage();
+    }
 
 
 
