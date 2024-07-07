@@ -227,26 +227,6 @@ public class LightsTests {
                 .writeToImage();
     }
 
-    /** Produce a picture of an eye*/
-    @Test
-    public void funTests() {
-        scene2.geometries.add(triangle1.setEmission(new Color(100,0,200)).setMaterial(new Material().setKD(KD).setKS(KS).setNShininess(SHININESS)),
-                triangle2.setEmission(new Color(0,50,50)).setEmission(new Color(100,0,100)).setMaterial(new Material().setKD(KD).setKS(KS).setNShininess(SHININESS))
-                ,new Sphere(new Point(0, 0, -150), 50).setEmission(new Color(225,225,225)).setMaterial(new Material().setKD(KD).setKS(KS).setNShininess(SHININESS)),
-                new Sphere(new Point(0, 0, -100), 20).setEmission(new Color(0,0,0)).setMaterial(new Material().setKD(KD).setKS(KS).setNShininess(SHININESS)),
-                new Sphere(new Point(0, 0, -130), 40).setEmission(new Color(0,50,100)).setMaterial(new Material().setKD(KD).setKS(KS).setNShininess(SHININESS)));
-
-        scene2.lights.add(new PointLight(new Color(500, 0, 0), new Point(20, 0, -80))
-                .setKl(0.002).setKq(0.0004));
-        scene2.lights.add(new DirectionalLight(new Color(0, 150, 150), new Vector(-1, -1, -1)));
-        scene2.lights.add(new SpotLight(new Color(300, 0, 150), new Point(40, 20, -120), new Vector(-2, -2, -2))
-                .setKl(0.002).setKq(0.0002));
-
-        camera2.setImageWriter(new ImageWriter("MyFunTest", 500, 500))
-                .build()
-                .renderImage()
-                .writeToImage();
-    }
 
     /** many shapes picture*/
     @Test
@@ -357,13 +337,16 @@ public class LightsTests {
                 new Polygon(new Point(1500, 100, -320), new Point(1400, -500, -320),
                         new Point(1400, -500, 400), new Point(1500, 100, 400))
                         .setEmission(new Color(0, 0, 0))
-                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKR(1)
-
-                        ));
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKR(1)),
+                new Sphere(new Point(0, -250, 200), 80).setEmission(new Color(0, 0, 30)).
+                        setMaterial(new Material().setKT(0.8).setNShininess(100).setKS(KS3).setKD(KD3))
+                        );
 
 
         sceneMine.lights.add(
                 new DirectionalLight(new Color(225, 225, 225), new Vector(1, -1, -1)));
+        sceneMine.lights.add(
+                new SpotLight(new Color(0, 0, 225),new Point(0, -250, 200), new Vector(-0.5, -1, -1)));
 
 
         // Adjust camera position and direction
@@ -380,39 +363,6 @@ public class LightsTests {
     }
 
 
-    /** many shapes picture*/
-    @Test
-    public void multipleMirrors() {
-        Scene sceneMine = new Scene("multiple Mirrors scene ")
-                .setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15)));
-
-
-
-        sceneMine.geometries.add(new Sphere(new Point(151,0,0),25 ).setEmission(randColor()).setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
-                new Plane(new Point(300, 0, 0), new Vector(1, 0, 0))
-                        .setEmission(new Color(0, 0, 0))
-                        .setMaterial(new Material().setKR(0.8).setKS(KS3).setKD(KD3).setNShininess(100)),
-                new Plane(new Point(-1, 0, 0), new Vector(-1, 0, 0)).setEmission(new Color(0, 0, 0))
-                .setMaterial(new Material().setKR(0.8).setKS(KS3).setKD(KD3).setNShininess(100))
-                );
-
-
-        sceneMine.lights.add(new DirectionalLight(new Color(225, 225, 225), new Vector(0, -1, -1)));
-
-
-
-        // Adjust camera position and direction
-        Camera.Builder cameraMine = Camera.getBuilder()
-                .setRayTracer(new SimpleRayTracer(sceneMine))
-                .setLocation(new Point(0, 0, 50))
-                .setDirection(new Vector(4, 0, -1), new Vector(1, 0, 4)) // Look towards the positive z-axis
-                .setVpSize(500, 500).setVpDistance(500); // Adjusted vpSize and vpDistance
-
-        cameraMine.setImageWriter(new ImageWriter("MultipleMirrors", 1000, 1000))
-                .build()
-                .renderImage()
-                .writeToImage();
-    }
 
 
 
