@@ -40,6 +40,21 @@ public class Geometries extends Intersectable {
         }
     }
 
+    @Override
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
+        List<GeoPoint> intersections = null;
+        for (Intersectable geo : _geometries) {
+            List<GeoPoint> tempIntersections =  geo.findGeoIntersections(ray, maxDistance) ;
+            if (tempIntersections != null) {
+                if (intersections == null) {
+                    intersections = new LinkedList<GeoPoint>();
+                }
+                intersections.addAll(tempIntersections);
+            }
+        }
+        return intersections;
+    }
+
     /**
      * find intersections of a ray with the geometries
      * @param ray

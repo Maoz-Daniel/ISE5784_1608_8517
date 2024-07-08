@@ -121,18 +121,18 @@ public class SimpleRayTracer extends RayTracerBase {
         Vector epsVector = n.scale(nl < 0 ? DELTA : -DELTA);
         Point point = gp.point.add(epsVector);
         Ray ray= new Ray(point, lightDirection);
-        var intersections = scene.geometries.findGeoIntersections(ray);
+        var intersections = scene.geometries.findGeoIntersections(ray, light.getDistance(gp.point));
         if( intersections== null)
             return Double3.ONE;
 
         Double3 ktr = Double3.ONE;
         double lightDistance = light.getDistance(gp.point);
         for (GeoPoint geoPoint : intersections) {
-            if (alignZero(geoPoint.point.distance(gp.point) - lightDistance) <= 0) {
+       //     if (alignZero(geoPoint.point.distance(gp.point) - lightDistance) <= 0) {
                 ktr = ktr.product(geoPoint.geometry.getMaterial().KT);
                 if (ktr.lowerThan(MIN_CALC_COLOR_K)) {
                     return Double3.ZERO;
-                }
+ //               }
             }
         }
         return ktr;

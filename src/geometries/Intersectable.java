@@ -10,6 +10,15 @@ import java.util.List;
  */
 public abstract class  Intersectable {
 
+    public final List<GeoPoint> findGeoIntersections(Ray ray) {
+        return findGeoIntersections(ray, Double.POSITIVE_INFINITY);
+    }
+    public final List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        return findGeoIntersectionsHelper(ray, maxDistance);
+    }
+    protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance);
+
+
     /**
      * Function findGeoIntersections finds the intersection points of a ray with the geometry.
      * @param ray - the ray that intersects the geometry
@@ -60,9 +69,7 @@ public abstract class  Intersectable {
     }
 
 
-    public List<GeoPoint> findGeoIntersections(Ray ray){
-        return findGeoIntersectionsHelper(ray);
-    }
+
 
     protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray);
 
