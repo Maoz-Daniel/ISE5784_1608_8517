@@ -27,49 +27,49 @@ public class everythingTests {
                         .setEmission(new Color(153, 0, 51)).setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20))
         );
 
-
-        for (int i = 0; i < 4; i++) {
-            double radius = i < 2 ? 120 + i*20 : 120 +60 -i*20;
-            double z = 20 + i*60;
-            scene.geometries.add(new Sphere(new Point(0, -450, z), radius).setEmission(new Color(242, 167, 69))
-                    .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20)));
-        }
-        scene.geometries.add( new Sphere(new Point(-53,-340,175),30)
-                .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20).setKR(1))
-                .setEmission(new Color(50, 50, 50)),
-                new Sphere(new Point(-50,-562,55),30)
-                        .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20).setKR(1))
-                        .setEmission(new Color(50, 50, 50))
-        );
-
-        int numberOfLeaves = 10;
-        double leafHeight = 100;
-        double leafWidth = 30;
-        double topOfPineapple = 320; // The z-coordinate for the base of the leaves
-
-        for (int i = 0; i < numberOfLeaves; i++) {
-            double angle = 2 * Math.PI * i / numberOfLeaves; // Angle for current leaf
-            double baseX1 = leafWidth * Math.cos(angle);
-            double baseY1 = leafWidth * Math.sin(angle);
-            double baseX2 = leafWidth * Math.cos(angle + Math.PI / numberOfLeaves);
-            double baseY2 = leafWidth * Math.sin(angle + Math.PI / numberOfLeaves);
-
-            // Create the triangles for each leaf
-            scene.geometries.add(new Triangle(
-                            new Point(0, -450, topOfPineapple-50),
-                            new Point(baseX1*3, baseY1*3 - 450, topOfPineapple + leafHeight),
-                            new Point(baseX2*3, baseY2*3 - 450, topOfPineapple + leafHeight))
-                            .setEmission(new Color(7, 220, 50))
-                            .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20)),
-
-                    new Triangle(new Point(0, -450, topOfPineapple-80),
-                            new Point(baseX1*4, baseY1*4 - 450, topOfPineapple + leafHeight-30),
-                            new Point(baseX2*4, baseY2*4 - 450, topOfPineapple + leafHeight-30))
-                            .setEmission(new Color(7, 220, 50))
-                            .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20)));
-        }
-
-
+//
+//        for (int i = 0; i < 4; i++) {
+//            double radius = i < 2 ? 120 + i*20 : 120 +60 -i*20;
+//            double z = 20 + i*60;
+//            scene.geometries.add(new Sphere(new Point(0, -450, z), radius).setEmission(new Color(242, 167, 69))
+//                    .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20)));
+//        }
+//        scene.geometries.add( new Sphere(new Point(-53,-340,175),30)
+//                .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20).setKR(1))
+//                .setEmission(new Color(50, 50, 50)),
+//                new Sphere(new Point(-50,-562,55),30)
+//                        .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20).setKR(1))
+//                        .setEmission(new Color(50, 50, 50))
+//        );
+//
+//        int numberOfLeaves = 10;
+//        double leafHeight = 100;
+//        double leafWidth = 30;
+//        double topOfPineapple = 320; // The z-coordinate for the base of the leaves
+//
+//        for (int i = 0; i < numberOfLeaves; i++) {
+//            double angle = 2 * Math.PI * i / numberOfLeaves; // Angle for current leaf
+//            double baseX1 = leafWidth * Math.cos(angle);
+//            double baseY1 = leafWidth * Math.sin(angle);
+//            double baseX2 = leafWidth * Math.cos(angle + Math.PI / numberOfLeaves);
+//            double baseY2 = leafWidth * Math.sin(angle + Math.PI / numberOfLeaves);
+//
+//            // Create the triangles for each leaf
+//            scene.geometries.add(new Triangle(
+//                            new Point(0, -450, topOfPineapple-50),
+//                            new Point(baseX1*3, baseY1*3 - 450, topOfPineapple + leafHeight),
+//                            new Point(baseX2*3, baseY2*3 - 450, topOfPineapple + leafHeight))
+//                            .setEmission(new Color(7, 220, 50))
+//                            .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20)),
+//
+//                    new Triangle(new Point(0, -450, topOfPineapple-80),
+//                            new Point(baseX1*4, baseY1*4 - 450, topOfPineapple + leafHeight-30),
+//                            new Point(baseX2*4, baseY2*4 - 450, topOfPineapple + leafHeight-30))
+//                            .setEmission(new Color(7, 220, 50))
+//                            .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20)));
+//        }
+//
+//
 
 
         // Define the points once
