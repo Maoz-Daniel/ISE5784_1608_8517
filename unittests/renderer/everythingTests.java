@@ -6,6 +6,7 @@ import geometries.Sphere;
 import geometries.Triangle;
 import lighting.AmbientLight;
 import lighting.DirectionalLight;
+import lighting.PointLight;
 import org.junit.jupiter.api.Test;
 import primitives.*;
 import scene.Scene;
@@ -162,28 +163,44 @@ public class everythingTests {
         Point V2 = new Point(45, -150, 240);
 
         scene.geometries.add(
-                new Polygon(K2, L2, Q2, R2).setEmission(new Color(32, 93, 136))
+                new Polygon(K2, L2, Q2, R2).setEmission(new Color(32, 93, 136)).setEmission(new Color(21,70,103))
                         .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20)),
-                new Polygon(S2, T2, V2, U2).setEmission(new Color(32, 93, 136))
+                new Polygon(S2, T2, V2, U2).setEmission(new Color(32, 93, 136)).setEmission(new Color(21,70,103))
                         .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20)),
-                new Polygon(T2, L2, Q2, V2).setEmission(new Color(32, 93, 136))
+                new Polygon(T2, L2, Q2, V2).setEmission(new Color(32, 93, 136)).setEmission(new Color(21,70,103))
                         .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20)),
-                new Polygon(S2, K2, R2, U2).setEmission(new Color(32, 93, 136))
+                new Polygon(S2, K2, R2, U2).setEmission(new Color(32, 93, 136)).setEmission(new Color(21,70,103))
                         .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20)),
-                new Polygon(S2, T2, L2, K2).setEmission(new Color(32, 93, 136))
+                new Polygon(S2, T2, L2, K2).setEmission(new Color(32, 93, 136)).setEmission(new Color(21,70,103))
                         .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20)),
-                new Polygon(U2, R2, Q2, V2).setEmission(new Color(32, 93, 136))
+                new Polygon(U2, R2, Q2, V2).setEmission(new Color(32, 93, 136)).setEmission(new Color(21,70,103))
                         .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20))
 
 
         );
 
 
+        for(int i = 0; i < 5; i++) {
+            int x = -900;
+            int y = -300 + i * 150;
+            scene.geometries.add(new Sphere(new Point(x, y, 5), 25).setEmission(new Color(150, 0, 150))
+                    .setMaterial(new Material().setNShininess(20).setKT(0.6).setKS(0.5).setKD(0.5)));
+            scene.lights.add(
+                    new PointLight(new Color(30, 30, 30),new Point(x, y, 5)));
+        }
 
+        scene.geometries.add(
+                new Sphere(new Point(23200, 5000, -6000), 8000)
+                        .setEmission(new Color(228, 189, 129))
+                        .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20)),
+                new Sphere(new Point(28200, -6000, -3000), 9000)
+                        .setEmission(new Color(228, 189, 129))
+                        .setMaterial(new Material().setKD(0.5).setKS(0.5).setNShininess(20))
+        );
 
 
         scene.lights.add(
-                new DirectionalLight(new Color(100, 100, 100), new Vector(1, -1, -1)));
+                new DirectionalLight(new Color(50, 50, 200), new Vector(1, -1, -1)));
 
         Camera.Builder cameraMine1 = (Camera.getBuilder()
                 .setRayTracer(new SimpleRayTracer(scene))
@@ -196,27 +213,27 @@ public class everythingTests {
                 .renderImage()
                 .writeToImage();
 
-        Camera.Builder cameraMine2 = (Camera.getBuilder()
-                .setRayTracer(new SimpleRayTracer(scene))
-                .setLocation(new Point(-1700, 500, 300))
-                .setDirection(new Vector(3, 2, -1), new Vector(-1, 1, -1)) // Look towards the positive z-axis
-                .setVpSize(500, 500).setVpDistance(600)); // Adjusted vpSize and vpDistance
-
-        cameraMine2.setImageWriter(new ImageWriter("SpongeBob2", 1000, 1000))
-                .build()
-                .renderImage()
-                .writeToImage();
-
-        Camera.Builder cameraMine3 = (Camera.getBuilder()
-                .setRayTracer(new SimpleRayTracer(scene))
-                .setLocation(new Point(-1700, 0, 100))
-                .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
-                .setVpSize(500, 500).setVpDistance(600)); // Adjusted vpSize and vpDistance
-
-        cameraMine3.setImageWriter(new ImageWriter("SpongeBob2", 1000, 1000))
-                .build()
-                .renderImage()
-                .writeToImage();
+//        Camera.Builder cameraMine2 = (Camera.getBuilder()
+//                .setRayTracer(new SimpleRayTracer(scene))
+//                .setLocation(new Point(-1300, 800, 600))
+//                .setDirection(new Vector(5, -3, -2), new Vector(5, -3, 17)) // Look towards the positive z-axis
+//                .setVpSize(500, 500).setVpDistance(600)); // Adjusted vpSize and vpDistance
+//
+//        cameraMine2.setImageWriter(new ImageWriter("SpongeBob2", 1000, 1000))
+//                .build()
+//                .renderImage()
+//                .writeToImage();
+//
+//       Camera.Builder cameraMine3 = (Camera.getBuilder()
+//               .setRayTracer(new SimpleRayTracer(scene))
+//                .setLocation(new Point(0, 0, 2000))
+//               .setDirection(new Vector(0, 0, -1), new Vector(1, 0, 0)) // Look towards the positive z-axis
+//                .setVpSize(500, 500).setVpDistance(600)); // Adjusted vpSize and vpDistance
+//
+//        cameraMine3.setImageWriter(new ImageWriter("SpongeBob3", 1000, 1000))
+//                .build()
+//                .renderImage()
+//                .writeToImage();
 
     }
 }
