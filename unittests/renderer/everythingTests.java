@@ -233,7 +233,7 @@ public class everythingTests {
 //        cameraMine3.setImageWriter(new ImageWriter("SpongeBob3", 1000, 1000))
 //                .build()
 //                .renderImage()
-//                .writeToImage();;
+//                .writeToImage();
 
     }
 }
