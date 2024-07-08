@@ -303,7 +303,7 @@ public class LightsTests {
     @Test
     public void funTests2() {
         Scene sceneMine = new Scene("Test scene for fun")
-                .setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15)));
+                .setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15))).setBackground(new Color(50,70,150));
 
         // Add geometries to the scene
         sceneMine.geometries.add(
@@ -328,16 +328,16 @@ public class LightsTests {
                 new Plane(new Point(0, 0, -320), new Vector(0, 0, 1))
                         .setEmission(new Color(225, 50, 50))
                         .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
-                new Plane(new Point(3500, 0, 0), new Vector(1, 0, 0))
-                        .setEmission(new Color(50, 225, 100))
-                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+//                new Plane(new Point(3500, 0, 0), new Vector(1, 0, 0))
+//                        .setEmission(new Color(50, 225, 100))
+//                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
                 new Sphere(new Point(2000, -700, 900), 150)
                         .setEmission(new Color(225, 225, 0))
                         .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKT(0.3)),
                 new Polygon(new Point(1500, 100, -320), new Point(1400, -500, -320),
                         new Point(1400, -500, 400), new Point(1500, 100, 400))
                         .setEmission(new Color(0, 0, 0))
-                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKR(1)),
+                        .setMaterial(new Material().setKR(0.8)),
                 new Sphere(new Point(0, -250, 200), 80).setEmission(new Color(0, 0, 30)).
                         setMaterial(new Material().setKT(0.8).setNShininess(100).setKS(KS3).setKD(KD3))
                         );
