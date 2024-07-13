@@ -55,11 +55,6 @@ public class Geometries extends Intersectable {
         return intersections;
     }
 
-    /**
-     * find intersections of a ray with the geometries
-     * @param ray
-     * @return list of intersections
-     */
     @Override
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         List<GeoPoint> intersections = null;

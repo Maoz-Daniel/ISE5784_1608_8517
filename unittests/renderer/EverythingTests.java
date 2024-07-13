@@ -11,10 +11,17 @@ import org.junit.jupiter.api.Test;
 import primitives.*;
 import scene.Scene;
 
+/**
+ * Test rendering a basic image
+ */
 public class EverythingTests {
     private final Scene scene = new Scene("Test scene")
             .setAmbientLight(new AmbientLight(new Color(228, 189, 129), new Double3(0.15))).setBackground(new Color(127, 204, 224));
 
+    /**
+     * Test method for
+     * {@link renderer.ImageWriter#writeToImage()}.
+     */
     @Test
     public void testEverything() {
 
