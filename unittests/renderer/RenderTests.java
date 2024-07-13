@@ -2,6 +2,10 @@ package renderer;
 
 import static java.awt.Color.*;
 
+import geometries.Plane;
+import geometries.Polygon;
+import lighting.DirectionalLight;
+import lighting.SpotLight;
 import org.junit.jupiter.api.Test;
 
 import geometries.Sphere;
@@ -78,19 +82,68 @@ public class RenderTests {
                 .writeToImage();
     }
 
-//    /** Test for XML based scene - for bonus */
-//    @Test
-//    public void basicRenderXml() {
-//        // enter XML file name and parse from XML file into scene object
-//        // using the code you added in appropriate packages
-//        // ...
-//        // NB: unit tests is not the correct place to put XML parsing code
-//
-//        camera
-//                .setImageWriter(new ImageWriter("xml render test", 1000, 1000))
-//                .build()
-//                .renderImage()
-//                .printGrid(100, new Color(YELLOW))
-//                .writeToImage();
-//    }
+    private static final Double3 KS3                     = new Double3(0.2, 0.4, 0.3);
+    private static final Double3 KD3                     = new Double3(0.2, 0.6, 0.4);
+    @Test
+    public void beamTest() {
+        Scene sceneMine = new Scene("beam Test")
+                .setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15))).setBackground(new Color(50,70,150));
+
+        // Add geometries to the scene
+        sceneMine.geometries.add(
+                new Sphere(new Point(0, 0, -170), 150)
+                        .setEmission(new Color(100, 100, 100))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(0, 0, 55), 100)
+                        .setEmission(new Color(100, 100, 100))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(0, 0, 215), 65)
+                        .setEmission(new Color(100, 100, 100))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(-55, 25, 220), 10)
+                        .setEmission(new Color(0, 0, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(-55, -25, 220), 10)
+                        .setEmission(new Color(0, 0, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(-60, 0, 200), 10)
+                        .setEmission(new Color(255, 140, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Plane(new Point(0, 0, -320), new Vector(0, 0, 1))
+                        .setEmission(new Color(225, 50, 50))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+//                new Plane(new Point(3500, 0, 0), new Vector(1, 0, 0))
+//                        .setEmission(new Color(50, 225, 100))
+//                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(2000, -700, 900), 150)
+                        .setEmission(new Color(225, 225, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKT(0.3)),
+                new Polygon(new Point(1500, 100, -320), new Point(1400, -500, -320),
+                        new Point(1400, -500, 400), new Point(1500, 100, 400))
+                        .setEmission(new Color(0, 0, 0))
+                        .setMaterial(new Material().setKR(0.8)),
+                new Sphere(new Point(0, -250, 200), 80).setEmission(new Color(0, 0, 30)).
+                        setMaterial(new Material().setKT(0.8).setNShininess(100).setKS(KS3).setKD(KD3))
+        );
+
+
+        sceneMine.lights.add(
+                new DirectionalLight(new Color(225, 225, 225), new Vector(1, -1, -1)));
+        sceneMine.lights.add(
+                new SpotLight(new Color(0, 0, 225),new Point(0, -250, 200), new Vector(-0.5, -1, -1)));
+
+
+        // Adjust camera position and direction
+        Camera.Builder cameraMine = Camera.getBuilder()
+                .setRayTracer(new SimpleRayTracer(sceneMine))
+                .setLocation(new Point(-1000, 0, 0))
+                .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
+                .setVpSize(500, 500).setVpDistance(600); // Adjusted vpSize and vpDistance
+
+        cameraMine.setImageWriter(new ImageWriter("BeamTest", 500, 500))
+                .build()
+                .renderImage(17)
+                .writeToImage();
+    }
+
 }

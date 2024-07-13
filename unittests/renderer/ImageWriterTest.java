@@ -28,6 +28,11 @@ public class ImageWriterTest {
         imageWriter.writeToImage();
     }
 
+    /**
+     * Test method for {@link ImageWriter#writeToImage()}.
+     */
+
+
 
 
 

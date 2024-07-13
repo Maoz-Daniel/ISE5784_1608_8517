@@ -12,26 +12,40 @@ import java.util.MissingResourceException;
  */
 public class Camera implements Cloneable {
 
-    /** The point of the camera */
+    /**
+     * The point of the camera
+     */
     private Point p0;
 
-    /** The up vector of the camera */
+    /**
+     * The up vector of the camera
+     */
     private Vector vUp;
 
-    /** The to vector of the camera */
+    /**
+     * The to vector of the camera
+     */
     private Vector vTo;
 
-    /** The right vector of the camera */
+    /**
+     * The right vector of the camera
+     */
     private Vector vRight;
 
-    /** The width of the view plane */
-    private double width= 0.0;
+    /**
+     * The width of the view plane
+     */
+    private double width = 0.0;
 
-    /** The height of the view plane */
-    private double height= 0.0;
+    /**
+     * The height of the view plane
+     */
+    private double height = 0.0;
 
-    /** The distance of the view plane */
-    private double distance= 0.0;
+    /**
+     * The distance of the view plane
+     */
+    private double distance = 0.0;
 
     private ImageWriter imageWriter;
 
@@ -44,6 +58,7 @@ public class Camera implements Cloneable {
 
     /**
      * get the point of the camera
+     *
      * @return
      */
     public Point getP0() {
@@ -52,6 +67,7 @@ public class Camera implements Cloneable {
 
     /**
      * get the up vector of the camera
+     *
      * @return
      */
     public Vector getVUp() {
@@ -60,6 +76,7 @@ public class Camera implements Cloneable {
 
     /**
      * get the to vector of the camera
+     *
      * @return
      */
     public Vector getVTo() {
@@ -68,6 +85,7 @@ public class Camera implements Cloneable {
 
     /**
      * get the right vector of the camera
+     *
      * @return
      */
     public Vector getVRight() {
@@ -76,6 +94,7 @@ public class Camera implements Cloneable {
 
     /**
      * get the width of the view plane
+     *
      * @return
      */
     public double getWidth() {
@@ -84,6 +103,7 @@ public class Camera implements Cloneable {
 
     /**
      * get the height of the view plane
+     *
      * @return
      */
     public double getHeight() {
@@ -92,6 +112,7 @@ public class Camera implements Cloneable {
 
     /**
      * get the distance of the view plane
+     *
      * @return
      */
     public double getDistance() {
@@ -103,14 +124,15 @@ public class Camera implements Cloneable {
     }
 
     /**
-     * construct a ray through a pixel in the view plane
+     * Construct a point on the view plane
+     *
      * @param nX number of pixels in the columns
      * @param nY number of pixels in the rows
-     * @param j the column index of the pixel
-     * @param i the row index of the pixel
-     * @return the ray through the pixel
+     * @param j  the column index of the pixel
+     * @param i  the row index of the pixel
+     * @return the point on the view plane
      */
-    public Ray constructRay(int nX, int nY, int j, int i) {
+    private Point constructRayPoint(int nX, int nY, int j, int i) {
         // Calculate the center point of the view plane
         Point pc = p0.add(vTo.scale(distance));
 
@@ -132,7 +154,22 @@ public class Camera implements Cloneable {
         if (!Util.isZero(yI)) {
             pIJ = pIJ.add(vUp.scale(yI)); // Typically, the y direction is inverted in image coordinates
         }
+        return pIJ;
+    }
 
+
+    /**
+     * construct a ray through a pixel in the view plane
+     *
+     * @param nX number of pixels in the columns
+     * @param nY number of pixels in the rows
+     * @param j  the column index of the pixel
+     * @param i  the row index of the pixel
+     * @return the ray through the pixel
+     */
+    public Ray constructRay(int nX, int nY, int j, int i) {
+        // Calculate the center point of the view plane
+        Point pIJ = constructRayPoint(nX, nY, j, i);
         // Create the ray from the camera origin to the pixel on the view plane
         Vector direction = pIJ.subtract(p0);
         return new Ray(p0, direction);
@@ -285,6 +322,26 @@ public class Camera implements Cloneable {
     }
 
     /**
+     * Render the image with beam of rays
+     * @param sampleSize
+     * @return
+     */
+    public Camera renderImage(int sampleSize) {
+        // Calculate the number of pixels in the rows and columns
+        int nX = imageWriter.getNx();
+        int nY = imageWriter.getNy();
+
+        // Render the image
+        for (int i = 0; i < nY; i++) {
+            for (int j = 0; j < nX; j++) {
+                castBeam(nX, nY, j, i, sampleSize);
+            }
+        }
+        return this;
+    }
+
+
+    /**
      * Print a grid on the view plane
      * @param interval the interval between the grid lines
      * @param color the color of the grid lines
@@ -327,6 +384,34 @@ public class Camera implements Cloneable {
         Ray ray = constructRay(nX, nY, column, row);
         Color color = rayTracer.traceRay(ray);
         imageWriter.writePixel(column, row, color);
+    }
+
+    private void castBeam(int nX, int nY, int column, int row, int sampleSize) {
+        Point pIJ = constructRayPoint(nX, nY, column, row);
+        double rY = (height / (double) nY); // height of a single pixel
+        double rX = (width / (double) nX);  // width of a single pixel
+        pIJ = pIJ.add(vRight.scale(-rX/2));
+        pIJ = pIJ.add(vUp.scale(rY/2));
+        Color color =new Color(0,0,0);
+
+        for (int i = 0; i < sampleSize +1; i++) {
+            for (int j = 0; j < sampleSize+1; j++) {
+                Point p = pIJ;
+                // Adjust the point based on the x and y offsets
+                if (!Util.isZero(j)) {
+                    p = p.add(vRight.scale(j * rX / sampleSize));
+                }
+                if (!Util.isZero(i)) {
+                    p = p.add(vUp.scale(-i * rY / sampleSize)); // Typically, the y direction is inverted in image coordinates
+                }
+                Ray ray = new Ray(p0, p.subtract(p0));
+                color = color.add(rayTracer.traceRay(ray));
+
+            }
+        }
+        color = color.reduce(sampleSize*sampleSize);
+        imageWriter.writePixel(column, row, color);
+
     }
 
 }

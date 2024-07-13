@@ -356,7 +356,7 @@ public class LightsTests {
                 .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
                 .setVpSize(500, 500).setVpDistance(600); // Adjusted vpSize and vpDistance
 
-        cameraMine.setImageWriter(new ImageWriter("MyFunTestMine", 1000, 1000))
+        cameraMine.setImageWriter(new ImageWriter("MyFunTestMine", 500, 500))
                 .build()
                 .renderImage()
                 .writeToImage();
