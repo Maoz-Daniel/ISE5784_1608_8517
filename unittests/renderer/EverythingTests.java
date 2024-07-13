@@ -251,27 +251,27 @@ public class EverythingTests {
                     .writeToImage();
 
 
-        Camera.Builder cameraMine2 = (Camera.getBuilder()
-                .setRayTracer(new SimpleRayTracer(scene))
-                .setLocation(new Point(-1300, 800, 600))
-                .setDirection(new Vector(5, -3, -2), new Vector(5, -3, 17)) // Look towards the positive z-axis
-                .setVpSize(500, 500).setVpDistance(600)); // Adjusted vpSize and vpDistance
-
-        cameraMine2.setImageWriter(new ImageWriter("SpongeBob2", 1000, 1000))
-                .build()
-                .renderImage()
-                .writeToImage();
-
-       Camera.Builder cameraMine3 = (Camera.getBuilder()
-               .setRayTracer(new SimpleRayTracer(scene))
-                .setLocation(new Point(0, 0, 2000))
-               .setDirection(new Vector(0, 0, -1), new Vector(1, 0, 0)) // Look towards the positive z-axis
-                .setVpSize(500, 500).setVpDistance(600)); // Adjusted vpSize and vpDistance
-
-        cameraMine3.setImageWriter(new ImageWriter("SpongeBob3", 1000, 1000))
-                .build()
-                .renderImage()
-                .writeToImage();
+//        Camera.Builder cameraMine2 = (Camera.getBuilder()
+//                .setRayTracer(new SimpleRayTracer(scene))
+//                .setLocation(new Point(-1300, 800, 600))
+//                .setDirection(new Vector(5, -3, -2), new Vector(5, -3, 17)) // Look towards the positive z-axis
+//                .setVpSize(500, 500).setVpDistance(600)); // Adjusted vpSize and vpDistance
+//
+//        cameraMine2.setImageWriter(new ImageWriter("SpongeBob2", 1000, 1000))
+//                .build()
+//                .renderImage()
+//                .writeToImage();
+//
+//       Camera.Builder cameraMine3 = (Camera.getBuilder()
+//               .setRayTracer(new SimpleRayTracer(scene))
+//                .setLocation(new Point(0, 0, 2000))
+//               .setDirection(new Vector(0, 0, -1), new Vector(1, 0, 0)) // Look towards the positive z-axis
+//                .setVpSize(500, 500).setVpDistance(600)); // Adjusted vpSize and vpDistance
+//
+//        cameraMine3.setImageWriter(new ImageWriter("SpongeBob3", 1000, 1000))
+//                .build()
+//                .renderImage()
+//                .writeToImage();
 
         }
     }
