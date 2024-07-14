@@ -51,6 +51,10 @@ public class Camera implements Cloneable {
 
     private RayTracerBase rayTracer;
 
+    private double aperture = 0.0;
+
+    private double focalLength = 0.0;
+
     private Camera() {
 
     }
@@ -117,6 +121,14 @@ public class Camera implements Cloneable {
      */
     public double getDistance() {
         return distance;
+    }
+
+    public double getAperture() {
+        return aperture;
+    }
+
+    public double getFocalLength() {
+        return focalLength;
     }
 
     public static Builder getBuilder() {
@@ -252,6 +264,16 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        public Builder setAperture(double _aperture) {
+            camera.aperture = _aperture;
+            return this;
+        }
+
+        public Builder setFocalLength(double _focalLength) {
+            camera.focalLength = _focalLength;
+            return this;
+        }
+
         /**
          * Build the camera
          * @return the camera
@@ -307,7 +329,6 @@ public class Camera implements Cloneable {
      */
     public Camera renderImage() {
 
-
         // Calculate the number of pixels in the rows and columns
         int nX = imageWriter.getNx();
         int nY = imageWriter.getNy();
@@ -322,7 +343,7 @@ public class Camera implements Cloneable {
     }
 
     /**
-     * Render the image with beam of rays
+     * Render the image with beam of rays Anti-aliasing
      * @param sampleSize
      * @return
      */
@@ -330,15 +351,29 @@ public class Camera implements Cloneable {
         // Calculate the number of pixels in the rows and columns
         int nX = imageWriter.getNx();
         int nY = imageWriter.getNy();
+        if (focalLength != 0.0 && aperture != 0.0) {
 
-        // Render the image
-        for (int i = 0; i < nY; i++) {
-            for (int j = 0; j < nX; j++) {
-                castBeam(nX, nY, j, i, sampleSize);
+            // Render the image
+            for (int i = 0; i < nY; i++) {
+                for (int j = 0; j < nX; j++) {
+                    depthOfField(nX, nY, j, i, sampleSize);
+                }
             }
+            return this;
         }
-        return this;
+        else {
+
+            // Render the image
+            for (int i = 0; i < nY; i++) {
+                for (int j = 0; j < nX; j++) {
+                    antiAliasing(nX, nY, j, i, sampleSize);
+                }
+            }
+            return this;
+        }
     }
+
+
 
 
     /**
@@ -386,7 +421,46 @@ public class Camera implements Cloneable {
         imageWriter.writePixel(column, row, color);
     }
 
-    private void castBeam(int nX, int nY, int column, int row, int sampleSize) {
+    private Point focalPoint(Vector v) {
+
+        return p0.add(v.scale(v.dotProduct(vTo.scale(focalLength))));
+
+    }
+
+    private void depthOfField(int nX, int nY, int column, int row, int sampleSize) {
+        Point pIJ = constructRayPoint(nX, nY, column, row);
+        Vector v =  pIJ.subtract(p0).normalize();
+        Point focalPoint = focalPoint(v);
+
+
+
+//        double rY = (height / (double) nY); // height of a single pixel
+//        double rX = (width / (double) nX);  // width of a single pixel
+        pIJ = pIJ.add(vRight.scale(-aperture/2));
+        pIJ = pIJ.add(vUp.scale(aperture/2));
+        Color color =new Color(0,0,0);
+
+        for (int i = 0; i < sampleSize +1; i++) {
+            for (int j = 0; j < sampleSize+1; j++) {
+                Point p = pIJ;
+                // Adjust the point based on the x and y offsets
+                if (!Util.isZero(j)) {
+                    p = p.add(vRight.scale(j * aperture / sampleSize));
+                }
+                if (!Util.isZero(i)) {
+                    p = p.add(vUp.scale(-i * aperture / sampleSize)); // Typically, the y direction is inverted in image coordinates
+                }
+                Ray ray = new Ray(p, focalPoint.subtract(p));
+                color = color.add(rayTracer.traceRay(ray));
+
+            }
+        }
+        color = color.reduce((sampleSize+1)*(sampleSize+1));
+        imageWriter.writePixel(column, row, color);
+
+    }
+
+    private void antiAliasing(int nX, int nY, int column, int row, int sampleSize) {
         Point pIJ = constructRayPoint(nX, nY, column, row);
         double rY = (height / (double) nY); // height of a single pixel
         double rX = (width / (double) nX);  // width of a single pixel
@@ -409,7 +483,7 @@ public class Camera implements Cloneable {
 
             }
         }
-        color = color.reduce(sampleSize*sampleSize);
+        color = color.reduce((sampleSize+1)*(sampleSize+1));
         imageWriter.writePixel(column, row, color);
 
     }

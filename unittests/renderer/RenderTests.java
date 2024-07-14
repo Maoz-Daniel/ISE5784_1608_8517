@@ -138,11 +138,55 @@ public class RenderTests {
                 .setRayTracer(new SimpleRayTracer(sceneMine))
                 .setLocation(new Point(-1000, 0, 0))
                 .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
-                .setVpSize(500, 500).setVpDistance(600); // Adjusted vpSize and vpDistance
+                .setVpSize(500, 500).setVpDistance(600).setAperture(15).setFocalLength(0); // Adjusted vpSize and vpDistance
 
         cameraMine.setImageWriter(new ImageWriter("BeamTest", 500, 500))
                 .build()
                 .renderImage(17)
+                .writeToImage();
+    }
+
+    @Test
+    public void DepthOfField() {
+        Scene sceneMine = new Scene("beam Test")
+                .setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15))).setBackground(Color.BLACK);
+
+        // Add geometries to the scene
+        sceneMine.geometries.add(
+                new Sphere(new Point(-200, 200, 0), 100)
+                        .setEmission(new Color(0, 0, 225))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(100, 50, 0), 100)
+                        .setEmission(new Color(0, 225, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(400, -100, 0), 100)
+                        .setEmission(new Color(225, 0, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(800, -300, 0), 100)
+                        .setEmission(new Color(150, 0, 150))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(1200, -500, 0), 100)
+                        .setEmission(new Color(150, 150, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100))
+
+        );
+
+
+        sceneMine.lights.add(
+                new DirectionalLight(new Color(225, 225, 225), new Vector(1, -1, -1)));
+
+
+
+        // Adjust camera position and direction
+        Camera.Builder cameraMine = Camera.getBuilder()
+                .setRayTracer(new SimpleRayTracer(sceneMine))
+                .setLocation(new Point(-1000, 0, 0))
+                .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
+                .setVpSize(500, 500).setVpDistance(600).setFocalLength(1300).setAperture(17); // Adjusted vpSize and vpDistance
+
+        cameraMine.setImageWriter(new ImageWriter("DepthTest", 500, 500))
+                .build()
+                .renderImage(33)
                 .writeToImage();
     }
 
