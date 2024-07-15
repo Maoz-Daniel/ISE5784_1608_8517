@@ -433,12 +433,10 @@ public class Camera implements Cloneable {
         Point focalPoint = focalPoint(v);
 
 
-
-//        double rY = (height / (double) nY); // height of a single pixel
-//        double rX = (width / (double) nX);  // width of a single pixel
         pIJ = pIJ.add(vRight.scale(-aperture/2));
         pIJ = pIJ.add(vUp.scale(aperture/2));
         Color color =new Color(0,0,0);
+        double count = (sampleSize+1)*(sampleSize+1);
 
         for (int i = 0; i < sampleSize +1; i++) {
             for (int j = 0; j < sampleSize+1; j++) {
@@ -450,14 +448,17 @@ public class Camera implements Cloneable {
                 if (!Util.isZero(i)) {
                     p = p.add(vUp.scale(-i * aperture / sampleSize)); // Typically, the y direction is inverted in image coordinates
                 }
-                Ray ray = new Ray(p, focalPoint.subtract(p));
-                color = color.add(rayTracer.traceRay(ray));
-
+                if(p.distance(pIJ) <= aperture) {
+                    Ray ray = new Ray(p, focalPoint.subtract(p));
+                    color = color.add(rayTracer.traceRay(ray));
+                }
+                else {
+                    count--;
+                }
             }
         }
-        color = color.reduce((sampleSize+1)*(sampleSize+1));
+        color = color.reduce(count);
         imageWriter.writePixel(column, row, color);
-
     }
 
     private void antiAliasing(int nX, int nY, int column, int row, int sampleSize) {
@@ -471,7 +472,6 @@ public class Camera implements Cloneable {
         for (int i = 0; i < sampleSize +1; i++) {
             for (int j = 0; j < sampleSize+1; j++) {
                 Point p = pIJ;
-                // Adjust the point based on the x and y offsets
                 if (!Util.isZero(j)) {
                     p = p.add(vRight.scale(j * rX / sampleSize));
                 }
