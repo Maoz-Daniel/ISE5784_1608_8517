@@ -47,23 +47,36 @@ public class Camera implements Cloneable {
      */
     private double distance = 0.0;
 
+    /**
+     * The image writer
+     */
     private ImageWriter imageWriter;
 
+    /**
+     * The ray tracer
+     */
     private RayTracerBase rayTracer;
 
+    /**
+     * The aperture of the camera
+     */
     private double aperture = 0.0;
 
+    /**
+     * The focal length of the camera
+     */
     private double focalLength = 0.0;
 
+    /**
+     * Camera constructor
+     */
     private Camera() {
-
     }
-
 
     /**
      * get the point of the camera
      *
-     * @return
+     * @return the point of the camera
      */
     public Point getP0() {
         return p0;
@@ -72,7 +85,7 @@ public class Camera implements Cloneable {
     /**
      * get the up vector of the camera
      *
-     * @return
+     * @return the up vector of the camera
      */
     public Vector getVUp() {
         return vUp;
@@ -81,7 +94,7 @@ public class Camera implements Cloneable {
     /**
      * get the to vector of the camera
      *
-     * @return
+     * @return the to vector of the camera
      */
     public Vector getVTo() {
         return vTo;
@@ -90,7 +103,7 @@ public class Camera implements Cloneable {
     /**
      * get the right vector of the camera
      *
-     * @return
+     * @return the right vector of the camera
      */
     public Vector getVRight() {
         return vRight;
@@ -99,7 +112,7 @@ public class Camera implements Cloneable {
     /**
      * get the width of the view plane
      *
-     * @return
+     * @return the width of the view plane
      */
     public double getWidth() {
         return width;
@@ -108,7 +121,7 @@ public class Camera implements Cloneable {
     /**
      * get the height of the view plane
      *
-     * @return
+     * @return the height of the view plane
      */
     public double getHeight() {
         return height;
@@ -117,32 +130,46 @@ public class Camera implements Cloneable {
     /**
      * get the distance of the view plane
      *
-     * @return
+     * @return the distance of the view plane
      */
     public double getDistance() {
         return distance;
     }
 
+    /**
+     * get the aperture of the camera
+     *
+     * @return the aperture of the camera
+     */
     public double getAperture() {
         return aperture;
     }
 
+    /**
+     * get the focal length of the camera
+     *
+     * @return the focal length of the camera
+     */
     public double getFocalLength() {
         return focalLength;
     }
 
+    /**
+     * Builder pattern for the camera
+     *
+     * @return the camera builder
+     */
     public static Builder getBuilder() {
         return new Builder();
     }
 
     /**
-     * Construct a point on the view plane
-     *
-     * @param nX number of pixels in the columns
-     * @param nY number of pixels in the rows
-     * @param j  the column index of the pixel
-     * @param i  the row index of the pixel
-     * @return the point on the view plane
+     * Construct a point on the view plane based on the pixel index
+     * @param nX
+     * @param nY
+     * @param j
+     * @param i
+     * @return
      */
     private Point constructRayPoint(int nX, int nY, int j, int i) {
         // Calculate the center point of the view plane
@@ -264,11 +291,21 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        /**
+         * Set the aperture of the camera
+         * @param _aperture the aperture of the camera
+         * @return the builder
+         */
         public Builder setAperture(double _aperture) {
             camera.aperture = _aperture;
             return this;
         }
 
+        /**
+         * Set the focal length of the camera
+         * @param _focalLength the focal length of the camera
+         * @return the builder
+         */
         public Builder setFocalLength(double _focalLength) {
             camera.focalLength = _focalLength;
             return this;
@@ -324,8 +361,9 @@ public class Camera implements Cloneable {
         }
     }
 
-    /**
-     * Render the image
+   /**
+     * Render the image without sample Size
+     * @return the camera
      */
     public Camera renderImage() {
 
@@ -343,11 +381,15 @@ public class Camera implements Cloneable {
     }
 
     /**
-     * Render the image with beam of rays Anti-aliasing
+     * Render the image with beam
      * @param sampleSize
-     * @return
+     * @return the camera
      */
     public Camera renderImage(int sampleSize) {
+        if (sampleSize == 1)
+        {
+            return renderImage();
+        }
         // Calculate the number of pixels in the rows and columns
         int nX = imageWriter.getNx();
         int nY = imageWriter.getNy();
@@ -421,17 +463,31 @@ public class Camera implements Cloneable {
         imageWriter.writePixel(column, row, color);
     }
 
+    /**
+     * Calculate the focal point of the camera
+     * @param v the direction of the camera
+     * @return the focal point of the camera
+     */
     private Point focalPoint(Vector v) {
 
         return p0.add(v.scale(v.dotProduct(vTo.scale(focalLength))));
 
     }
 
+    /**
+     * Cast rays through a pixel in the view plane with depth of field
+     * @param nX number of pixels in the columns
+     * @param nY number of pixels in the rows
+     * @param column the column index of the pixel
+     * @param row the row index of the pixel
+     * @param sampleSize the number of rays to cast through the pixel
+     */
     private void depthOfField(int nX, int nY, int column, int row, int sampleSize) {
         Point pIJ = constructRayPoint(nX, nY, column, row);
         Vector v =  pIJ.subtract(p0).normalize();
         Point focalPoint = focalPoint(v);
-
+        double rY = (height / (double) nY); // height of a single pixel
+        double rX = (width / (double) nX);  // width of a single pixel
 
         pIJ = pIJ.add(vRight.scale(-aperture/2));
         pIJ = pIJ.add(vUp.scale(aperture/2));
@@ -441,12 +497,20 @@ public class Camera implements Cloneable {
         for (int i = 0; i < sampleSize +1; i++) {
             for (int j = 0; j < sampleSize+1; j++) {
                 Point p = pIJ;
+                double xrand = -0.5 + (Math.random() * (0.5 - (-0.5)));
+                double yrand = -0.5 + (Math.random() * (0.5 - (-0.5)));
                 // Adjust the point based on the x and y offsets
                 if (!Util.isZero(j)) {
                     p = p.add(vRight.scale(j * aperture / sampleSize));
                 }
                 if (!Util.isZero(i)) {
                     p = p.add(vUp.scale(-i * aperture / sampleSize)); // Typically, the y direction is inverted in image coordinates
+                }
+                if (!Util.isZero(xrand)) {
+                    p = p.add(vRight.scale(xrand*rX/sampleSize)); // Typically, the y direction is inverted in image coordinates
+                }
+                if (!Util.isZero(yrand)) {
+                    p = p.add(vUp.scale(yrand*rY/sampleSize)); // Typically, the y direction is inverted in image coordinates
                 }
                 if(p.distance(pIJ) <= aperture) {
                     Ray ray = new Ray(p, focalPoint.subtract(p));
@@ -461,12 +525,23 @@ public class Camera implements Cloneable {
         imageWriter.writePixel(column, row, color);
     }
 
+    /**
+     * Cast rays through a pixel in the view plane with anti-aliasing
+     * @param nX number of pixels in the columns
+     * @param nY number of pixels in the rows
+     * @param column the column index of the pixel
+     * @param row the row index of the pixel
+     * @param sampleSize the number of rays to cast through the pixel
+     */
     private void antiAliasing(int nX, int nY, int column, int row, int sampleSize) {
         Point pIJ = constructRayPoint(nX, nY, column, row);
         double rY = (height / (double) nY); // height of a single pixel
         double rX = (width / (double) nX);  // width of a single pixel
         pIJ = pIJ.add(vRight.scale(-rX/2));
         pIJ = pIJ.add(vUp.scale(rY/2));
+        double xrand = -0.5 + (Math.random() * (0.5 - (-0.5)));
+        double yrand = -0.5 + (Math.random() * (0.5 - (-0.5)));
+
         Color color =new Color(0,0,0);
 
         for (int i = 0; i < sampleSize +1; i++) {
@@ -478,6 +553,13 @@ public class Camera implements Cloneable {
                 if (!Util.isZero(i)) {
                     p = p.add(vUp.scale(-i * rY / sampleSize)); // Typically, the y direction is inverted in image coordinates
                 }
+                if (!Util.isZero(xrand)) {
+                    p = p.add(vRight.scale(xrand*rX/sampleSize)); // Typically, the y direction is inverted in image coordinates
+                }
+                if (!Util.isZero(yrand)) {
+                    p = p.add(vUp.scale(yrand*rY/sampleSize)); // Typically, the y direction is inverted in image coordinates
+                }
+
                 Ray ray = new Ray(p0, p.subtract(p0));
                 color = color.add(rayTracer.traceRay(ray));
 

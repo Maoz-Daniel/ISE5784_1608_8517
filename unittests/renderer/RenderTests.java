@@ -81,70 +81,17 @@ public class RenderTests {
                 .writeToImage();
     }
 
+    /**
+     * Produce a scene with basic 3D model - including individual lights of the
+     * bodies and render it into a png image with a grid
+     */
     private static final Double3 KS3                     = new Double3(0.2, 0.4, 0.3);
     private static final Double3 KD3                     = new Double3(0.2, 0.6, 0.4);
-    @Test
-    public void beamTest() {
-        Scene sceneMine = new Scene("beam Test")
-                .setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15))).setBackground(new Color(50,70,150));
-
-        // Add geometries to the scene
-        sceneMine.geometries.add(
-                new Sphere(new Point(0, 0, -170), 150)
-                        .setEmission(new Color(100, 100, 100))
-                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
-                new Sphere(new Point(0, 0, 55), 100)
-                        .setEmission(new Color(100, 100, 100))
-                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
-                new Sphere(new Point(0, 0, 215), 65)
-                        .setEmission(new Color(100, 100, 100))
-                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
-                new Sphere(new Point(-55, 25, 220), 10)
-                        .setEmission(new Color(0, 0, 0))
-                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
-                new Sphere(new Point(-55, -25, 220), 10)
-                        .setEmission(new Color(0, 0, 0))
-                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
-                new Sphere(new Point(-60, 0, 200), 10)
-                        .setEmission(new Color(255, 140, 0))
-                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
-                new Plane(new Point(0, 0, -320), new Vector(0, 0, 1))
-                        .setEmission(new Color(225, 50, 50))
-                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
-//                new Plane(new Point(3500, 0, 0), new Vector(1, 0, 0))
-//                        .setEmission(new Color(50, 225, 100))
-//                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
-                new Sphere(new Point(2000, -700, 900), 150)
-                        .setEmission(new Color(225, 225, 0))
-                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKT(0.3)),
-                new Polygon(new Point(1500, 100, -320), new Point(1400, -500, -320),
-                        new Point(1400, -500, 400), new Point(1500, 100, 400))
-                        .setEmission(new Color(0, 0, 0))
-                        .setMaterial(new Material().setKR(0.8)),
-                new Sphere(new Point(0, -250, 200), 80).setEmission(new Color(0, 0, 30)).
-                        setMaterial(new Material().setKT(0.8).setNShininess(100).setKS(KS3).setKD(KD3))
-        );
 
 
-        sceneMine.lights.add(
-                new DirectionalLight(new Color(225, 225, 225), new Vector(1, -1, -1)));
-        sceneMine.lights.add(
-                new SpotLight(new Color(0, 0, 225),new Point(0, -250, 200), new Vector(-0.5, -1, -1)));
-
-
-        // Adjust camera position and direction
-        Camera.Builder cameraMine = Camera.getBuilder()
-                .setRayTracer(new SimpleRayTracer(sceneMine))
-                .setLocation(new Point(-1000, 0, 0))
-                .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
-                .setVpSize(500, 500).setVpDistance(600).setAperture(15).setFocalLength(0); // Adjusted vpSize and vpDistance
-
-        cameraMine.setImageWriter(new ImageWriter("BeamTest", 500, 500))
-                .build()
-                .renderImage(17)
-                .writeToImage();
-    }
-
+    /**
+     * Produce a scene with basic 3D model - with depth of field
+     */
     @Test
     public void DepthOfField() {
         Scene sceneMine = new Scene("beam Test")
@@ -181,7 +128,7 @@ public class RenderTests {
                 .setRayTracer(new SimpleRayTracer(sceneMine))
                 .setLocation(new Point(-1000, 0, 0))
                 .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
-                .setVpSize(500, 500).setVpDistance(600).setFocalLength(1300).setAperture(17); // Adjusted vpSize and vpDistance
+                .setVpSize(500, 500).setVpDistance(600).setFocalLength(2200).setAperture(21); // Adjusted vpSize and vpDistance
 
         cameraMine.setImageWriter(new ImageWriter("DepthTest", 500, 500))
                 .build()
@@ -189,6 +136,56 @@ public class RenderTests {
                 .writeToImage();
     }
 
+    /**
+     * Produce a scene with basic 3D mode - without depth of field
+     */
+    @Test
+    public void DepthOfFieldWithout() {
+        Scene sceneMine = new Scene("beam Test")
+                .setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15))).setBackground(Color.BLACK);
+
+        // Add geometries to the scene
+        sceneMine.geometries.add(
+                new Sphere(new Point(-200, 200, 0), 100)
+                        .setEmission(new Color(0, 0, 225))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(100, 50, 0), 100)
+                        .setEmission(new Color(0, 225, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(400, -100, 0), 100)
+                        .setEmission(new Color(225, 0, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(800, -300, 0), 100)
+                        .setEmission(new Color(150, 0, 150))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100)),
+                new Sphere(new Point(1200, -500, 0), 100)
+                        .setEmission(new Color(150, 150, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100))
+
+        );
+
+
+        sceneMine.lights.add(
+                new DirectionalLight(new Color(225, 225, 225), new Vector(1, -1, -1)));
+
+
+
+        // Adjust camera position and direction
+        Camera.Builder cameraMine = Camera.getBuilder()
+                .setRayTracer(new SimpleRayTracer(sceneMine))
+                .setLocation(new Point(-1000, 0, 0))
+                .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
+                .setVpSize(500, 500).setVpDistance(600); // Adjusted vpSize and vpDistance
+
+        cameraMine.setImageWriter(new ImageWriter("DepthTestWithout", 500, 500))
+                .build()
+                .renderImage()
+                .writeToImage();
+    }
+
+    /**
+     * Produce a scene with basic 3D model - with depth of field
+     */
     @Test
     public void DepthOfField2() {
         Scene sceneMine = new Scene("beam Test")
@@ -243,6 +240,60 @@ public class RenderTests {
     }
 
 
+    /**
+     * Produce a scene with basic 3D model - with anti-aliasing
+     */
+    @Test
+    public void AntiAliasingTestWithout() {
+        Scene sceneMine = new Scene("beam Test")
+                .setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15))).setBackground(Color.BLACK);
+
+
+        // Add geometries to the scene
+        sceneMine.geometries.add(
+               new Plane(new Point(0, 0, -20), new Vector(0, 0, 1))
+                        .setEmission(new Color(225, 50, 50))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKR(0.3)),
+                new Triangle(new Point(0, -100, 0), new Point(300, 0, 500),
+                        new Point(100, 300, 200))
+                        .setEmission(new Color(225, 150, 0))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(50)),
+                new Triangle(new Point(-30, -100, 0), new Point(150, 20, 300),
+                        new Point(30, 400, 140))
+                        .setEmission(new Color(0, 150, 220))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(50)),
+                new Triangle(new Point(-60, -100, 0), new Point(0, 100, 200),
+                        new Point(-100, -100, 200))
+                        .setEmission(new Color(10, 225, 100))
+                        .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(50))
+
+        );
+
+        sceneMine.lights.add(
+                new DirectionalLight(new Color(0, 0, 225), new Vector(-2, 0, -1)));
+        sceneMine.lights.add(
+                new DirectionalLight(new Color(225, 0, 0), new Vector(5,-1, -2)));
+        sceneMine.lights.add(
+                new DirectionalLight(new Color(0, 225, 0), new Vector(-1, 3, -1)));
+
+
+
+
+        // Adjust camera position and direction
+        Camera.Builder cameraMine = Camera.getBuilder()
+                .setRayTracer(new SimpleRayTracer(sceneMine))
+                .setLocation(new Point(-700, 0, 0))
+                .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
+                .setVpSize(500, 500).setVpDistance(600); // Adjusted vpSize and vpDistance
+
+        cameraMine.setImageWriter(new ImageWriter("Anti-Aliasing Test Without", 500, 500))
+                .build()
+                .renderImage()
+                .writeToImage();
+    }
+    /**
+     * Produce a scene with basic 3D model - without anti-aliasing
+     */
     @Test
     public void AntiAliasingTest() {
         Scene sceneMine = new Scene("beam Test")
@@ -251,7 +302,7 @@ public class RenderTests {
 
         // Add geometries to the scene
         sceneMine.geometries.add(
-               new Plane(new Point(0, 0, -20), new Vector(0, 0, 1))
+                new Plane(new Point(0, 0, -20), new Vector(0, 0, 1))
                         .setEmission(new Color(225, 50, 50))
                         .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKR(0.3)),
                 new Triangle(new Point(0, -100, 0), new Point(300, 0, 500),
