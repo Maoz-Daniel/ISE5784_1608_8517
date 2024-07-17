@@ -128,7 +128,7 @@ public class RenderTests {
                 .setRayTracer(new SimpleRayTracer(sceneMine))
                 .setLocation(new Point(-1000, 0, 0))
                 .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
-                .setVpSize(500, 500).setVpDistance(600).setFocalLength(2200).setAperture(21); // Adjusted vpSize and vpDistance
+                .setVpSize(500, 500).setVpDistance(600).setFocalLength(2200).setAperture(21).setPrintInterval(0.1).setThreadsCount(4); // Adjusted vpSize and vpDistance
 
         cameraMine.setImageWriter(new ImageWriter("DepthTest", 500, 500))
                 .build()

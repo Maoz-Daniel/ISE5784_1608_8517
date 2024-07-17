@@ -5,7 +5,10 @@ import primitives.Vector;
 import primitives.Ray;
 import primitives.Color;
 
+import static renderer.PixelManager.*;
 import java.util.MissingResourceException;
+import java.util.LinkedList;
+
 
 /**
  * Camera class represents a camera in 3D Cartesian coordinate
@@ -72,42 +75,11 @@ public class Camera implements Cloneable {
      */
     private Camera() {
     }
+    private PixelManager pixelManager;
+    private int threadsCount = 0;
+    private double printInterval = 0;
 
-    /**
-     * get the point of the camera
-     *
-     * @return the point of the camera
-     */
-    public Point getP0() {
-        return p0;
-    }
 
-    /**
-     * get the up vector of the camera
-     *
-     * @return the up vector of the camera
-     */
-    public Vector getVUp() {
-        return vUp;
-    }
-
-    /**
-     * get the to vector of the camera
-     *
-     * @return the to vector of the camera
-     */
-    public Vector getVTo() {
-        return vTo;
-    }
-
-    /**
-     * get the right vector of the camera
-     *
-     * @return the right vector of the camera
-     */
-    public Vector getVRight() {
-        return vRight;
-    }
 
     /**
      * get the width of the view plane
@@ -312,6 +284,38 @@ public class Camera implements Cloneable {
         }
 
         /**
+         * Set the number of threads
+         * @param _threadsCount the number of threads
+         * @return the builder
+         */
+        public Builder setThreadsCount(int _threadsCount) {
+            camera.threadsCount = _threadsCount;
+            return this;
+        }
+
+        public Builder setDebugPrint(double d) {
+            camera.printInterval = d;
+            return this;
+        }
+
+
+
+
+
+        /**
+         * Set the print interval
+         * @param _printInterval the print interval
+         * @return the builder
+         */
+        public Builder setPrintInterval(double _printInterval) {
+            camera.printInterval = _printInterval;
+            return this;
+        }
+
+
+
+
+        /**
          * Build the camera
          * @return the camera
          */
@@ -371,12 +375,30 @@ public class Camera implements Cloneable {
         int nX = imageWriter.getNx();
         int nY = imageWriter.getNy();
 
+        pixelManager = new PixelManager(nY, nX, printInterval);
+
+        if(threadsCount==0)
         // Render the image
-        for (int i = 0; i < nY; i++) {
+        for (int i = 0; i < nY; i++)
             for (int j = 0; j < nX; j++) {
                 castRays(nX, nY, j, i);
             }
+        else { // see further... option 2
+            var threads = new LinkedList<Thread>(); // list of threads
+            while (threadsCount-- > 0) // add appropriate number of threads
+                threads.add(new Thread(() -> { // add a thread with its code
+                    Pixel pixel; // current pixel(row,col)
+                    // allocate pixel(row,col) in loop until there are no more pixels
+                    while ((pixel = pixelManager.nextPixel()) != null)
+                        // cast ray through pixel (and color it – inside castRay)
+                        castRays(nX, nY, pixel.col(), pixel.row());
+                }));
+            // start all the threads
+            for (var thread : threads) thread.start();
+            // wait until all the threads have finished
+            try { for (var thread : threads) thread.join(); } catch (InterruptedException ignore) {}
         }
+
         return this;
     }
 
@@ -393,25 +415,61 @@ public class Camera implements Cloneable {
         // Calculate the number of pixels in the rows and columns
         int nX = imageWriter.getNx();
         int nY = imageWriter.getNy();
+        pixelManager = new PixelManager(nY, nX, printInterval);
         if (focalLength != 0.0 && aperture != 0.0) {
 
-            // Render the image
-            for (int i = 0; i < nY; i++) {
-                for (int j = 0; j < nX; j++) {
-                    depthOfField(nX, nY, j, i, sampleSize);
-                }
+            if(threadsCount==0)
+                // Render the image
+                for (int i = 0; i < nY; i++)
+                    for (int j = 0; j < nX; j++) {
+                        castRays(nX, nY, j, i);
+                    }
+            else { // see further... option 2
+                var threads = new LinkedList<Thread>(); // list of threads
+                while (threadsCount-- > 0) // add appropriate number of threads
+                    threads.add(new Thread(() -> { // add a thread with its code
+                        Pixel pixel; // current pixel(row,col)
+                        // allocate pixel(row,col) in loop until there are no more pixels
+                        while ((pixel = pixelManager.nextPixel()) != null)
+                            // cast ray through pixel (and color it – inside castRay)
+                            depthOfField(nX, nY, pixel.col(), pixel.row(), sampleSize);
+                    }));
+                // start all the threads
+                for (var thread : threads) thread.start();
+                // wait until all the threads have finished
+                try { for (var thread : threads) thread.join(); } catch (InterruptedException ignore) {}
             }
+
             return this;
+
+
         }
         else {
 
-            // Render the image
-            for (int i = 0; i < nY; i++) {
-                for (int j = 0; j < nX; j++) {
-                    antiAliasing(nX, nY, j, i, sampleSize);
-                }
+            if(threadsCount==0)
+                // Render the image
+                for (int i = 0; i < nY; i++)
+                    for (int j = 0; j < nX; j++) {
+                        castRays(nX, nY, j, i);
+                    }
+            else { // see further... option 2
+                var threads = new LinkedList<Thread>(); // list of threads
+                while (threadsCount-- > 0) // add appropriate number of threads
+                    threads.add(new Thread(() -> { // add a thread with its code
+                        Pixel pixel; // current pixel(row,col)
+                        // allocate pixel(row,col) in loop until there are no more pixels
+                        while ((pixel = pixelManager.nextPixel()) != null)
+                            // cast ray through pixel (and color it – inside castRay)
+                            antiAliasing(nX, nY, pixel.col(), pixel.row(), sampleSize);
+                    }));
+                // start all the threads
+                for (var thread : threads) thread.start();
+                // wait until all the threads have finished
+                try { for (var thread : threads) thread.join(); } catch (InterruptedException ignore) {}
             }
             return this;
+
+
         }
     }
 
@@ -461,6 +519,7 @@ public class Camera implements Cloneable {
         Ray ray = constructRay(nX, nY, column, row);
         Color color = rayTracer.traceRay(ray);
         imageWriter.writePixel(column, row, color);
+        pixelManager.pixelDone();
     }
 
     /**
@@ -523,6 +582,8 @@ public class Camera implements Cloneable {
         }
         color = color.reduce(count);
         imageWriter.writePixel(column, row, color);
+        pixelManager.pixelDone();
+
     }
 
     /**
