@@ -1,9 +1,6 @@
 package renderer;
 
-import geometries.Plane;
-import geometries.Polygon;
-import geometries.Sphere;
-import geometries.Triangle;
+import geometries.*;
 import lighting.AmbientLight;
 import lighting.DirectionalLight;
 import lighting.PointLight;
@@ -24,6 +21,14 @@ public class EverythingTests {
      */
     @Test
     public void testEverything() {
+        Geometries pineappleBase = new Geometries();
+        Geometries pineappleLeaves = new Geometries();
+        Geometries pineapple = new Geometries();
+        Geometries squidward = new Geometries();
+        Geometries patrick = new Geometries();
+        Geometries mountain = new Geometries();
+        Geometries houses = new Geometries();
+        Geometries bubbles = new Geometries();
 
         // Define the materials once
         Material material = new Material().setKD(0.5).setKS(0.5).setNShininess(20);
@@ -39,8 +44,7 @@ public class EverythingTests {
         scene.geometries.add(
                 new Plane(new Point(0, 0, 0), new Vector(0, 0, 1))
                         .setEmission(new Color(228, 189, 129)).setMaterial(material),
-                new Sphere(new Point(0, 480, 0), 170)
-                        .setEmission(new Color(153, 0, 51)).setMaterial(material),
+
                 new Polygon(C, D, E, F).setEmission(new Color(134, 83, 35)).setMaterial(new Material().setKD(0.8).setKS(0.2).setNShininess(30)),
 
                 new Polygon(new Point(0, 440, 1), new Point(0, 520, 1), new Point(-160, 520, 1), new Point(-1600, 440, 1))
@@ -51,15 +55,20 @@ public class EverythingTests {
 
 
         );
+        patrick = new Geometries(new Sphere(new Point(0, 480, 0), 170)
+                .setEmission(new Color(153, 0, 51)).setMaterial(material));
+
+
+
 
 
         for (int i = 0; i < 4; i++) {
             double radius = i < 2 ? 120 + i * 20 : 120 + 60 - i * 20;
             double z = 20 + i * 60;
-            scene.geometries.add(new Sphere(new Point(0, -450, z), radius).setEmission(new Color(242, 167, 69))
+            pineappleBase.add(new Sphere(new Point(0, -450, z), radius).setEmission(new Color(242, 167, 69))
                     .setMaterial(material));
         }
-        scene.geometries.add(new Sphere(new Point(-53, -340, 175), 30)
+        pineappleBase.add(new Sphere(new Point(-53, -340, 175), 30)
                         .setMaterial(materialWithKr)
                         .setEmission(c_50_50_50),
                 new Sphere(new Point(-50, -562, 55), 30)
@@ -80,19 +89,20 @@ public class EverythingTests {
             double baseY2 = leafWidth * Math.sin(angle + Math.PI / numberOfLeaves);
 
             // Create the triangles for each leaf
-            scene.geometries.add(new Triangle(
+            pineappleLeaves.add(new Triangle(
                             new Point(0, -450, topOfPineapple - 50),
                             new Point(baseX1 * 3, baseY1 * 3 - 450, topOfPineapple + leafHeight),
                             new Point(baseX2 * 3, baseY2 * 3 - 450, topOfPineapple + leafHeight))
                             .setEmission(new Color(7, 220, 50))
                             .setMaterial(material),
-
                     new Triangle(new Point(0, -450, topOfPineapple - 80),
                             new Point(baseX1 * 4, baseY1 * 4 - 450, topOfPineapple + leafHeight - 30),
                             new Point(baseX2 * 4, baseY2 * 4 - 450, topOfPineapple + leafHeight - 30))
                             .setEmission(new Color(7, 220, 50))
                             .setMaterial(material));
         }
+        pineapple = new Geometries(pineappleLeaves, pineappleBase);
+
 
 
         // Define the points once
@@ -128,7 +138,7 @@ public class EverythingTests {
         Color c_21_70_103 = new Color(21, 70, 103);
 
         Point pm110_52_430 = new Point(-110, 52, 430);
-        scene.geometries.add(
+        squidward.add(
                 new Polygon(p1, p2, p3, p4).setEmission(c_32_93_136)
                         .setMaterial(material),
                 new Polygon(p5, p6, p7, p8).setEmission(c_32_93_136)
@@ -189,7 +199,7 @@ public class EverythingTests {
         Point U2 = new Point(-45, -150, 240);
         Point V2 = new Point(45, -150, 240);
 
-        scene.geometries.add(
+        squidward.add(
                 new Polygon(K2, L2, Q2, R2).setEmission(c_32_93_136).setEmission(c_21_70_103)
                         .setMaterial(material),
                 new Polygon(S2, T2, V2, U2).setEmission(c_32_93_136).setEmission(c_21_70_103)
@@ -205,19 +215,14 @@ public class EverythingTests {
 
 
         );
+        houses = new Geometries(squidward, patrick, pineapple);
 
 
-        for (int i = 0; i < 5; i++) {
-            int x = -900;
-            int y = -300 + i * 150;
-            scene.geometries.add(new Sphere(new Point(x, y, 5), 25).setEmission(new Color(150, 0, 150))
-                    .setMaterial(new Material().setNShininess(20).setKT(0.6).setKS(0.5).setKD(0.5)));
-            scene.lights.add(
-                    new PointLight(new Color(30, 30, 30), new Point(x, y, 5)));
-        }
+
+
 
         Color c_228_189_129 = new Color(228, 189, 129);
-        scene.geometries.add(
+        mountain.add(
                 new Sphere(new Point(23200, 5000, -6000), 8000)
                         .setEmission(c_228_189_129)
                         .setMaterial(material),
@@ -227,35 +232,45 @@ public class EverythingTests {
         );
 
 
-            scene.geometries.add(
-                    new Sphere(new Point(-100, -300, 450), 60) // Position of the bubble
-                            .setEmission(new Color(0, 0, 10)) // Light blue color for the bubble
-                            .setMaterial(new Material().setKT(1).setNShininess(100).setKS(0.2).setKD(0.2)), // Material properties with transparency
-                     new Sphere(new Point(-100, -350, 550), 40) // Position of the bubble
-                       .setEmission(new Color(0, 0, 10)) // Light blue color for the bubble
+        bubbles.add(
+                new Sphere(new Point(-100, -300, 450), 60) // Position of the bubble
+                        .setEmission(new Color(0, 0, 10)) // Light blue color for the bubble
                         .setMaterial(new Material().setKT(1).setNShininess(100).setKS(0.2).setKD(0.2)), // Material properties with transparency
-                    new Sphere(new Point(-100, -230, 600), 30) // Position of the bubble
-                            .setEmission(new Color(0, 0, 10)) // Light blue color for the bubble
-                            .setMaterial(new Material().setKT(1).setNShininess(100).setKS(0.2).setKD(0.2)), // Material properties with transparency
-                    new Sphere(new Point(-100, -369, 650), 20) // Position of the bubble
-                            .setEmission(new Color(0, 0, 10)) // Light blue color for the bubble
-                            .setMaterial(new Material().setKT(1).setNShininess(100).setKS(0.2).setKD(0.2)) // Material properties with transparency
+                new Sphere(new Point(-100, -350, 550), 40) // Position of the bubble
+                        .setEmission(new Color(0, 0, 10)) // Light blue color for the bubble
+                        .setMaterial(new Material().setKT(1).setNShininess(100).setKS(0.2).setKD(0.2)), // Material properties with transparency
+                new Sphere(new Point(-100, -230, 600), 30) // Position of the bubble
+                        .setEmission(new Color(0, 0, 10)) // Light blue color for the bubble
+                        .setMaterial(new Material().setKT(1).setNShininess(100).setKS(0.2).setKD(0.2)), // Material properties with transparency
+                new Sphere(new Point(-100, -369, 650), 20) // Position of the bubble
+                        .setEmission(new Color(0, 0, 10)) // Light blue color for the bubble
+                        .setMaterial(new Material().setKT(1).setNShininess(100).setKS(0.2).setKD(0.2)) // Material properties with transparency
 
-            );
+        );
 
+        for (int i = 0; i < 5; i++) {
+            int x = -900;
+            int y = -300 + i * 150;
+            scene.geometries.add(new Sphere(new Point(x, y, 5), 25).setEmission(new Color(150, 0, 150))
+                    .setMaterial(new Material().setNShininess(20).setKT(0.6).setKS(0.5).setKD(0.5)));
             scene.lights.add(
-                    new DirectionalLight(new Color(50, 50, 200), new Vector(1, -1, -1)));
+                    new PointLight(new Color(30, 30, 30), new Point(x, y, 5)));
+        }
+        scene.geometries.add(houses, bubbles, mountain);
 
-            Camera.Builder cameraMine1 = (Camera.getBuilder()
-                    .setRayTracer(new SimpleRayTracer(scene))
-                    .setLocation(new Point(-1700, 0, 100))
-                    .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
-                    .setVpSize(500, 500).setVpDistance(600)); // Adjusted vpSize and vpDistance
+        scene.lights.add(
+                new DirectionalLight(new Color(50, 50, 200), new Vector(1, -1, -1)));
 
-            cameraMine1.setImageWriter(new ImageWriter("SpongeBob1", 1000, 1000))
-                    .build()
-                    .renderImage()
-                    .writeToImage();
+        Camera.Builder cameraMine1 = (Camera.getBuilder()
+                .setRayTracer(new SimpleRayTracer(scene))
+                .setLocation(new Point(-1700, 0, 100))
+                .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
+                .setVpSize(500, 500).setVpDistance(600).setFocalLength(1700).setAperture(10).setThreadsCount(4).setPrintInterval(0.1)); // Adjusted vpSize and vpDistance
+
+        cameraMine1.setImageWriter(new ImageWriter("SpongeBob1", 1000, 1000))
+                .build()
+                .renderImage(17)
+                .writeToImage();
 
 
 //        Camera.Builder cameraMine2 = (Camera.getBuilder()
@@ -280,6 +295,6 @@ public class EverythingTests {
 //                .renderImage()
 //                .writeToImage();
 
-        }
     }
+}
 

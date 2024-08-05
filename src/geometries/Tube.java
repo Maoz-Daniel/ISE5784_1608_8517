@@ -44,4 +44,8 @@ public class Tube extends RadialGeometry {
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         return null;
     }
+
+    @Override
+    protected void calculateBoundingBox() {
+    }
 }

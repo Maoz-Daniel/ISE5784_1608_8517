@@ -298,10 +298,6 @@ public class Camera implements Cloneable {
             return this;
         }
 
-
-
-
-
         /**
          * Set the print interval
          * @param _printInterval the print interval
@@ -312,7 +308,31 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        /**
+         * Set the look at point
+         * @param p the point to look at
+         * @return the builder
+         */
+        public Builder lookAt(Point p) { // better name: lookAt
+            if (camera.p0 == null) {
+                throw new IllegalArgumentException("camera location is not set");
+            }
+            if (p.equals(camera.p0)) {
+                throw new IllegalArgumentException("camera is already looking at the point");
+            }
+            camera.vTo = p.subtract(camera.p0).normalize();
 
+            if (camera.vTo.equals(new Vector(0, 1, 0))){
+                camera.vRight = (new Vector(1, 0, 0));
+                camera.vUp = new Vector(0, 0, 1);
+            } else {
+                // vector Y with little angle so it will be perpendicular to vTo
+                camera.vRight =(new Vector(0,1,0)).crossProduct(camera.vTo).normalize();
+                camera.vUp = camera.vRight.crossProduct(camera.vTo).normalize();
+            }
+
+            return this;
+        }
 
 
         /**
@@ -377,12 +397,13 @@ public class Camera implements Cloneable {
 
         pixelManager = new PixelManager(nY, nX, printInterval);
 
-        if(threadsCount==0)
-        // Render the image
-        for (int i = 0; i < nY; i++)
-            for (int j = 0; j < nX; j++) {
-                castRays(nX, nY, j, i);
-            }
+        if(threadsCount==0) {
+            // Render the image
+            for (int i = 0; i < nY; i++)
+                for (int j = 0; j < nX; j++) {
+                    castRays(nX, nY, j, i);
+                }
+        }
         else { // see further... option 2
             var threads = new LinkedList<Thread>(); // list of threads
             while (threadsCount-- > 0) // add appropriate number of threads
@@ -450,7 +471,7 @@ public class Camera implements Cloneable {
                 // Render the image
                 for (int i = 0; i < nY; i++)
                     for (int j = 0; j < nX; j++) {
-                        castRays(nX, nY, j, i);
+                        antiAliasing(nX, nY, j, i,sampleSize);
                     }
             else { // see further... option 2
                 var threads = new LinkedList<Thread>(); // list of threads
@@ -630,5 +651,8 @@ public class Camera implements Cloneable {
         imageWriter.writePixel(column, row, color);
 
     }
+
+
+
 
 }

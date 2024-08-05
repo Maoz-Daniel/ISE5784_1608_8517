@@ -35,6 +35,7 @@ public class Plane extends Geometry{
     public Plane(Point q, Vector normal) {
         this.q = q;
         this.normal = normal.normalize();
+        calculateBoundingBox();
     }
 
     /** getter for the point on the plane* @return normal*/
@@ -88,5 +89,10 @@ public class Plane extends Geometry{
         }
         return List.of(new GeoPoint(this, ray.getPoint(t)));
 
+    }
+
+    @Override
+    protected void calculateBoundingBox() {
+        boundingBox = new BoundingBox(new Point(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY),new Point( Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY));
     }
 }

@@ -10,25 +10,35 @@ import java.util.List;
  */
 public abstract class  Intersectable {
 
+    protected BoundingBox boundingBox;
+
     /**
      * Function findGeoIntersections finds the intersection points of a ray with the geometry.
+     *
      * @param ray - the ray that intersects the geometry
      * @return a list of intersection points
      */
     public final List<GeoPoint> findGeoIntersections(Ray ray) {
+        if (boundingBox != null && !boundingBox.hasIntersection(ray)) {
+            return null;
+        }
         return findGeoIntersections(ray, Double.POSITIVE_INFINITY);
     }
+
     /**
      * Function findGeoIntersections finds the intersection points of a ray with the geometry.
-     * @param ray - the ray that intersects the geometry
+     *
+     * @param ray         - the ray that intersects the geometry
      * @param maxDistance - the maximum distance to find intersections
      * @return a list of intersection points
      */
     public final List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
         return findGeoIntersectionsHelper(ray, maxDistance);
     }
+
     /**
      * Function findGeoIntersections finds the intersection points of a ray with the geometry.
+     *
      * @param ray - the ray that intersects the geometry
      * @return a list of intersection points
      */
@@ -37,6 +47,7 @@ public abstract class  Intersectable {
 
     /**
      * Function findGeoIntersections finds the intersection points of a ray with the geometry.
+     *
      * @param ray - the ray that intersects the geometry
      * @return a list of intersection points
      */
@@ -45,6 +56,7 @@ public abstract class  Intersectable {
 
     /**
      * Function findGeoIntersections finds the intersection points of a ray with the geometry.
+     *
      * @param ray - the ray that intersects the geometry
      * @return a list of intersection points
      */
@@ -58,16 +70,21 @@ public abstract class  Intersectable {
      */
     public static class GeoPoint {
 
-        /** The geometry that the point is on */
+        /**
+         * The geometry that the point is on
+         */
         public Geometry geometry;
 
-        /** The point on the geometry */
+        /**
+         * The point on the geometry
+         */
         public Point point;
 
         /**
          * Constructor for GeoPoint
+         *
          * @param geometry - the geometry that the point is on
-         * @param point - the point on the geometry
+         * @param point    - the point on the geometry
          */
         public GeoPoint(Geometry geometry, Point point) {
             this.geometry = geometry;
@@ -79,7 +96,7 @@ public abstract class  Intersectable {
             if (this == obj) return true;
             if (obj == null) return false;
             if (!(obj instanceof GeoPoint)) return false;
-            GeoPoint other = (GeoPoint)obj;
+            GeoPoint other = (GeoPoint) obj;
             return this.geometry.equals(other.geometry) && this.point.equals(other.point);
         }
 
@@ -91,7 +108,8 @@ public abstract class  Intersectable {
                     '}';
         }
     }
-
-
-
+    /**
+     * Function calculateBoundingBox calculates the bounding box of the geometry.
+     */
+    protected abstract void calculateBoundingBox();
 }

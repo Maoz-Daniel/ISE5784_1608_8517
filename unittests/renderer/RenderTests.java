@@ -2,16 +2,14 @@ package renderer;
 
 import static java.awt.Color.*;
 
-import geometries.Plane;
-import geometries.Polygon;
+import geometries.*;
 import lighting.DirectionalLight;
-import lighting.SpotLight;
 import org.junit.jupiter.api.Test;
 
-import geometries.Sphere;
-import geometries.Triangle;
 import lighting.AmbientLight;
 import primitives.*;
+import primitives.Color;
+import primitives.Point;
 import scene.Scene;
 
 /**
@@ -19,12 +17,16 @@ import scene.Scene;
  * @author Dan
  */
 public class RenderTests {
-    /** Scene of the tests */
-    private final Scene          scene  = new Scene("Test scene");
-    /** Camera builder of the tests */
+    /**
+     * Scene of the tests
+     */
+    private final Scene scene = new Scene("Test scene");
+    /**
+     * Camera builder of the tests
+     */
     private final Camera.Builder camera = Camera.getBuilder()
             .setRayTracer(new SimpleRayTracer(scene))
-            .setLocation(Point.ZERO).setDirection(new Vector (0,0,-1), new Vector (0,1,0))
+            .setLocation(Point.ZERO).setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
             .setVpDistance(100)
             .setVpSize(500, 500);
 
@@ -54,6 +56,7 @@ public class RenderTests {
     }
 
     // For stage 6 - please disregard in stage 5
+
     /**
      * Produce a scene with basic 3D model - including individual lights of the
      * bodies and render it into a png image with a grid
@@ -85,8 +88,8 @@ public class RenderTests {
      * Produce a scene with basic 3D model - including individual lights of the
      * bodies and render it into a png image with a grid
      */
-    private static final Double3 KS3                     = new Double3(0.2, 0.4, 0.3);
-    private static final Double3 KD3                     = new Double3(0.2, 0.6, 0.4);
+    private static final Double3 KS3 = new Double3(0.2, 0.4, 0.3);
+    private static final Double3 KD3 = new Double3(0.2, 0.6, 0.4);
 
 
     /**
@@ -120,7 +123,6 @@ public class RenderTests {
 
         sceneMine.lights.add(
                 new DirectionalLight(new Color(225, 225, 225), new Vector(1, -1, -1)));
-
 
 
         // Adjust camera position and direction
@@ -167,7 +169,6 @@ public class RenderTests {
 
         sceneMine.lights.add(
                 new DirectionalLight(new Color(225, 225, 225), new Vector(1, -1, -1)));
-
 
 
         // Adjust camera position and direction
@@ -220,10 +221,8 @@ public class RenderTests {
         }
 
 
-
         sceneMine.lights.add(
                 new DirectionalLight(new Color(225, 225, 225), new Vector(1, -1, -1)));
-
 
 
         // Adjust camera position and direction
@@ -251,7 +250,7 @@ public class RenderTests {
 
         // Add geometries to the scene
         sceneMine.geometries.add(
-               new Plane(new Point(0, 0, -20), new Vector(0, 0, 1))
+                new Plane(new Point(0, 0, -20), new Vector(0, 0, 1))
                         .setEmission(new Color(225, 50, 50))
                         .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKR(0.3)),
                 new Triangle(new Point(0, -100, 0), new Point(300, 0, 500),
@@ -272,11 +271,9 @@ public class RenderTests {
         sceneMine.lights.add(
                 new DirectionalLight(new Color(0, 0, 225), new Vector(-2, 0, -1)));
         sceneMine.lights.add(
-                new DirectionalLight(new Color(225, 0, 0), new Vector(5,-1, -2)));
+                new DirectionalLight(new Color(225, 0, 0), new Vector(5, -1, -2)));
         sceneMine.lights.add(
                 new DirectionalLight(new Color(0, 225, 0), new Vector(-1, 3, -1)));
-
-
 
 
         // Adjust camera position and direction
@@ -291,6 +288,7 @@ public class RenderTests {
                 .renderImage()
                 .writeToImage();
     }
+
     /**
      * Produce a scene with basic 3D model - without anti-aliasing
      */
@@ -323,11 +321,9 @@ public class RenderTests {
         sceneMine.lights.add(
                 new DirectionalLight(new Color(0, 0, 225), new Vector(-2, 0, -1)));
         sceneMine.lights.add(
-                new DirectionalLight(new Color(225, 0, 0), new Vector(5,-1, -2)));
+                new DirectionalLight(new Color(225, 0, 0), new Vector(5, -1, -2)));
         sceneMine.lights.add(
                 new DirectionalLight(new Color(0, 225, 0), new Vector(-1, 3, -1)));
-
-
 
 
         // Adjust camera position and direction
@@ -335,7 +331,7 @@ public class RenderTests {
                 .setRayTracer(new SimpleRayTracer(sceneMine))
                 .setLocation(new Point(-700, 0, 0))
                 .setDirection(new Vector(1, 0, 0), new Vector(0, 0, 1)) // Look towards the positive z-axis
-                .setVpSize(500, 500).setVpDistance(600); // Adjusted vpSize and vpDistance
+                .setVpSize(500, 500).setVpDistance(600).setThreadsCount(4).setPrintInterval(0.1).setDebugPrint(3); // Adjusted vpSize and vpDistance
 
         cameraMine.setImageWriter(new ImageWriter("Anti-Aliasing Test", 500, 500))
                 .build()
@@ -343,4 +339,149 @@ public class RenderTests {
                 .writeToImage();
     }
 
+    /**
+     * Produce a scene with 100 spheres arranged closely and render it into a bvh image
+     */
+    @Test
+    public void BVHTestWithout() {
+        // Parameters for the spheres
+        int numSpheres = 300;
+        double spacing = 8;
+        double radius = 8;
+        int gridSize = (int) Math.sqrt(numSpheres);
+
+        for (int l = 0; l < 3; l++) {
+            for (int k = 0; k < 3; k++) {
+                for (int i = 0; i < gridSize; i++) {
+                    for (int j = 0; j < gridSize; j++) {
+                        double x = i * spacing - (gridSize * spacing / 2) -500 + k * 500;
+                        double y = j * spacing - (gridSize * spacing / 2)-500 + l * 500;
+                        double z = -200;
+                        scene.geometries.add(new Sphere(new Point(x, y, z), radius)
+                                .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100))
+                                .setEmission(new Color(0, 0, 225)));
+                    }
+                }
+
+            }
+
+
+        }
+
+
+        // Set ambient light and background
+        scene.setBackground(new Color(BLACK));
+
+        // Add directional light
+        scene.lights.add(new DirectionalLight(new Color(200, 200, 200), new Vector(1, -1, -1)));
+
+        scene.geometries.add(new Plane(new Point(0, 0, -400), new Vector(0, 0, 1))
+                .setEmission(new Color(225, 50, 50))
+                .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKR(0.3)
+                ));
+        // Render the scene
+        camera.setLocation(new Point(0, 0, 100)).setImageWriter(new ImageWriter("BVH Test Render Without", 1000, 1000))
+                .build()
+                .renderImage()
+                .writeToImage();
+    }
+
+    /**
+     * Produce a scene with 100 spheres arranged closely and render it into a bvh image
+     */
+    @Test
+    public void BVHTest() {
+        // Parameters for the spheres
+        int numSpheres = 300;
+        double spacing = 8;
+        double radius = 8;
+        int gridSize = (int) Math.sqrt(numSpheres);
+
+        for (int l = 0; l < 3; l++) {
+            for (int k = 0; k < 3; k++) {
+                Geometries g = new Geometries();
+                for (int i = 0; i < gridSize; i++) {
+                    for (int j = 0; j < gridSize; j++) {
+                        double x = i * spacing - (gridSize * spacing / 2) -500 + k * 500;
+                        double y = j * spacing - (gridSize * spacing / 2)-500 + l * 500;
+                        double z = -200;
+                        g.add(new Sphere(new Point(x, y, z), radius)
+                                .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100))
+                                .setEmission(new Color(0, 0, 225)));
+                    }
+                }
+                scene.geometries.add(g);
+            }
+        }
+
+        scene.geometries.add(new Plane(new Point(0, 0, -400), new Vector(0, 0, 1))
+                .setEmission(new Color(225, 50, 50))
+                .setMaterial(new Material().setKS(KS3).setKD(KD3).setNShininess(100).setKR(0.3)
+                        ));
+
+        // Set ambient light and background
+        scene.setBackground(new Color(BLACK));
+
+        // Add directional light
+        scene.lights.add(new DirectionalLight(new Color(200, 200, 200), new Vector(1, -1, -1)));
+
+        //  scene.geometries.makeBVH(); // should improve performance
+
+        // Render the scene
+        camera.setLocation(new Point(0, 0, 100)).setImageWriter(new ImageWriter("BVH Test Render", 1000, 1000))
+                .build()
+                .renderImage()
+                .writeToImage();
+    }
+
+    /**
+     * Produce a scene with basic 3D model - including individual lights of the
+     * rotate camera and render it into a png image
+     */
+    @Test
+    public void testCameraRotation(){
+        Scene scene = new Scene("Test scene").setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.15))).setBackground(Color.BLACK);
+        scene.CenterScene = new Point(0, 0, 0);
+        Camera.Builder camera = Camera.getBuilder()
+                .setRayTracer(new SimpleRayTracer(scene))
+                .setVpDistance(100)
+                .setVpSize(500, 500);
+
+        scene.geometries.add(
+                new Sphere(new Point(50, 50, 0), 50)
+                        .setEmission(new Color(0,0,225))
+                        .setMaterial(new Material().setKS(0.5).setKD(0.5).setNShininess(300)),
+                new Sphere(new Point(-50, 50, 0), 50)
+                        .setEmission(new Color(255,0,0))
+                        .setMaterial(new Material().setKS(0.5).setKD(0.5).setNShininess(300)),
+                new Sphere(new Point(-50, -50, 0), 50)
+                        .setEmission(new Color(0,225,0))
+                        .setMaterial(new Material().setKS(0.5).setKD(0.5).setNShininess(300)),
+                new Sphere(new Point(50, -50, 0), 50)
+                        .setEmission(new Color(200,200,0))
+                        .setMaterial(new Material().setKS(0.5).setKD(0.5).setNShininess(300))
+
+      );
+        scene.lights.add(new DirectionalLight(new Color(225, 225, 225), new Vector(-1, -1, -1)));
+
+        // right
+        camera .setLocation(new Point(0, 0, 200)).lookAt(scene.CenterScene)
+                .setImageWriter(new ImageWriter("camera rotation test1", 1000, 1000))
+                .build()
+                .renderImage()
+                .writeToImage();
+        camera. setLocation(new Point(-100, -100, 200)).lookAt(scene.CenterScene)
+                .setImageWriter(new ImageWriter("camera rotation test2", 1000, 1000))
+                .build()
+                .renderImage()
+                .writeToImage();
+
+        camera. setLocation(new Point(100, 100, -50)).lookAt(scene.CenterScene)
+                .setImageWriter(new ImageWriter("camera rotation test3", 1000, 1000))
+                .build()
+                .renderImage()
+                .writeToImage();
+    }
+
 }
+

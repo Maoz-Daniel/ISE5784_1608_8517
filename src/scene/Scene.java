@@ -8,6 +8,7 @@ import primitives.Color;
 import java.util.LinkedList;
 import java.util.List;
 import lighting.LightSource;
+import primitives.Point;
 
 /**
  * Scene class represents a scene in 3D Cartesian coordinate
@@ -28,6 +29,8 @@ public class Scene {
 
     /** The lights of the scene */
     public List<LightSource> lights = new LinkedList<>();
+
+    public Point CenterScene = null;
 
     /**
      * Constructor based on a name

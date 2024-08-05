@@ -79,6 +79,7 @@ public class Polygon extends Geometry {
          if (positive != (edge1.crossProduct(edge2).dotProduct(n) > 0))
             throw new IllegalArgumentException("All vertices must be ordered and the polygon must be convex");
       }
+        calculateBoundingBox();
    }
 
    @Override
@@ -121,6 +122,7 @@ public class Polygon extends Geometry {
             }
          }
       }
+
 
 
       List<GeoPoint> geoPoints = new LinkedList<GeoPoint>();
@@ -179,5 +181,29 @@ public class Polygon extends Geometry {
    }
 
 
+   @Override
+   protected void calculateBoundingBox() {
+      double xMax = Double.NEGATIVE_INFINITY;
+      double xMin = Double.POSITIVE_INFINITY;
 
+      double yMax = Double.NEGATIVE_INFINITY;
+      double yMin = Double.POSITIVE_INFINITY;
+
+      double zMax = Double.NEGATIVE_INFINITY;
+      double zMin = Double.POSITIVE_INFINITY;
+
+      for (Point p : vertices) {
+
+         xMin = Math.min(xMin, p.getX());
+         xMax = Math.max(xMax, p.getX());
+
+         yMin = Math.min(yMin, p.getY());
+         yMax = Math.max(yMax, p.getY());
+
+         zMin = Math.min(zMin, p.getZ());
+         zMax = Math.max(zMax, p.getZ());
+
+      }
+      boundingBox = new BoundingBox(new Point(xMin, yMin, zMin), new Point(xMax,yMax,zMax));
+   }
 }

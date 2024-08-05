@@ -53,4 +53,21 @@ public class Point {
         return  ((obj instanceof Point other)&&
                 xyz.equals(other.xyz));
     }
+
+    /** Getter for the x coordinate */
+    public double getX() {
+        return xyz.d1;
+    }
+
+    /** Getter for the y coordinate */
+    public double getY() {
+        return xyz.d2;
+    }
+
+    /** Getter for the z coordinate */
+    public double getZ() {
+        return xyz.d3;
+    }
+
+
 }

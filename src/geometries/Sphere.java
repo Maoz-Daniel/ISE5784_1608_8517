@@ -20,6 +20,7 @@ public class Sphere extends RadialGeometry{
     public Sphere(Point _center, double _radius) {
         super(_radius);
         center = _center;
+        calculateBoundingBox();
     }
 
     @Override
@@ -120,6 +121,39 @@ public class Sphere extends RadialGeometry{
         return null;
 
 
+    }
+
+    @Override
+    protected void calculateBoundingBox() {
+        boundingBox = new BoundingBox(
+                calculateMinPoint(center, radius),
+                calculateMaxPoint(center, radius)
+        );
+    }
+
+    /**
+     * Calculate the minimum point of the sphere
+     * @param center the center of the sphere
+     * @param radius the radius of the sphere
+     * @return the minimum point of the sphere
+     */
+    public static Point calculateMinPoint(Point center, double radius) {
+        double minX = center.getX() - radius;
+        double minY = center.getY() - radius;
+        double minZ = center.getZ() - radius;
+        return new Point(minX, minY,minZ);
+    }
+    /**
+     * Calculate the maximum point of the sphere
+     * @param center the center of the sphere
+     * @param radius the radius of the sphere
+     * @return the maximum point of the sphere
+     */
+    public static Point calculateMaxPoint(Point center, double radius) {
+        double maxX = center.getX() + radius;
+        double maxY = center.getY() + radius;
+        double maxZ = center.getZ() + radius;
+        return new Point(maxX, maxY,maxZ);
     }
 //
 //    @Override

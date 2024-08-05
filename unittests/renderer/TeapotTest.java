@@ -24,7 +24,7 @@ public class TeapotTest {
     private final Camera.Builder camera = new Camera.Builder().setLocation(new Point(0, 0, -1000)).setDirection(new Vector(0, 0, 1), new Vector(0, 1, 0)) //
             .setVpDistance(1000).setVpSize(200, 200) //
             .setImageWriter(imageWriter) //
-            .setThreadsCount(4).setDebugPrint(0.1);
+            .setThreadsCount(10).setDebugPrint(0.1);
 
     private final Scene scene = new Scene("Test scene");
 
